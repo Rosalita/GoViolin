@@ -5,6 +5,7 @@ import(
    "net/http"
    "html/template"
    "log"
+
 )
 func main(){
 
@@ -16,10 +17,11 @@ func main(){
   // serve everything in the css folder as a file
   http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
 
-    // when navigating to /home it should serve the home page
+  // when navigating to /home it should serve the home page
 
   http.HandleFunc("/", Index)
   http.HandleFunc("/home", Home)
+  http.HandleFunc("/scale", Scale)
   http.ListenAndServe(":8080", nil)
     // page per major scale a - g
     // generate these pages from a templatePaths
@@ -35,10 +37,20 @@ func main(){
     render(w, "home.html")
   }
 
+  func Scale(w http.ResponseWriter, r *http.Request){
+    r.ParseForm() //r is url.Values which is a map[string][]string
+    for key, values := range r.Form {   // range over map
+       for _, value := range values {    // range over []string
+       fmt.Println(key, value)
+  }
+}
+
+  }
+
   func render(w http.ResponseWriter, tmpl string){
-      fmt.Printf("%s", tmpl)
+
     tmpl = fmt.Sprintf("templates/%s", tmpl) // prefix the name passed in with templates/
-    fmt.Printf("%s", tmpl)
+
     t, err := template.ParseFiles(tmpl)
     if err != nil{
       log.Print("template parsing error: ", err)

@@ -17,23 +17,23 @@
 
 
 <div class="mainbody">
-<h1>This is a Heading</h1>
-<p>This is a paragraph.</p>
+<h1>Practice Scales</h1>
+<p>Select a key and pitch.</p>
 </div>
 
-<div class="scaleselect">
+<div class="keyselect">
 <form action="/scale" method="post">
   <input type="radio" name="key" value="major" checked> Major<br>
   <input type="radio" name="key" value="minor"> Minor<br>
-  <select class="dropdown">
-   <option value="A">A</option>
-   <option value="B">B</option>
-   <option value="C">C</option>
-   <option value="D">D</option>
-   <option value="E">E</option>
-   <option value="F">F</option>
-   <option value="G">G</option>
-  </select>
+  <div class="pitchselect">
+    <input type="radio" name="pitch" value="a" checked> A <br>
+    <input type="radio" name="pitch" value="b" checked> B <br>
+    <input type="radio" name="pitch" value="c" checked> C <br>
+    <input type="radio" name="pitch" value="d" checked> D <br>
+    <input type="radio" name="pitch" value="e" checked> E <br>
+    <input type="radio" name="pitch" value="f" checked> F <br>
+    <input type="radio" name="pitch" value="g" checked> G <br>
+</div>
 
 <!--    text:<input type="text" name="username"> -->
 <!--    Password:<input type="password" name="password"> -->
