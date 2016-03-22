@@ -68,9 +68,15 @@ nav li a:hover {
 
 
 .mainbody{
+
   padding-top: 75px;
 }
 
+.dropdown{
+      padding-top: 25px;
+  color: #A49A87;
+  margin-left: 20px;
+}
 footer {
   padding-top: 75px;
   color: #A49A87;
