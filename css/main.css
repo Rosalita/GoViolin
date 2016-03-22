@@ -1,0 +1,79 @@
+
+/* Colour theme
+   Dark brown - #332532
+   Light brown - #644D52
+   Peach - #F77A52
+   sunshine - #FF974F
+   grey blue - #A49A87
+ */
+
+
+/* reset all margins and padding*/
+ * {
+margin: 0;
+padding: 0;
+}
+
+body {
+    background-color: #332532;
+}
+
+h1 {
+    color: #FF974F;
+    margin-left: 20px;
+}
+
+p {
+  color: #F77A52;
+  margin-left: 20px;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #644D52;
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+nav li {
+  float: left;
+  border-right: 1px solid #A49A87;
+}
+
+
+nav li:last-child {
+    border-right: none;
+}
+
+nav li a {
+    display: inline-block;
+    color: #A49A87;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+
+nav li a:hover {
+    color: #F77A52;
+}
+
+.active {
+    background-color:  #332532;
+}
+
+
+.mainbody{
+  padding-top: 75px;
+}
+
+footer {
+  padding-top: 75px;
+  color: #A49A87;
+  margin-left: 20px;
+
+}
