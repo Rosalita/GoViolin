@@ -66,16 +66,18 @@ nav li a:hover {
     background-color:  #332532;
 }
 
-
 .mainbody{
-
   padding-top: 75px;
 }
 
-.dropdown{
-      padding-top: 25px;
+.scaleselect{
+  padding-top: 25px;
   color: #A49A87;
-  margin-left: 20px;
+  margin-left: 50px;
+}
+.dropdown{
+  margin-top: 10px;
+
 }
 footer {
   padding-top: 75px;

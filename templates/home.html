@@ -21,18 +21,24 @@
 <p>This is a paragraph.</p>
 </div>
 
-<div class="dropdown">
-<select>
- <option value="Amj">A Major</option>
- <option value="Bmj">B Major</option>
- <option value="Cmj">C Major</option>
- <option value="Dmj">D Major</option>
- <option value="Emj">E Major</option>
- <option value="Fmj">F Major</option>
- <option value="Gmj">G Major</option>
-</select>
+<div class="scaleselect">
+<form action="/scale" method="post">
+  <input type="radio" name="key" value="major" checked> Major<br>
+  <input type="radio" name="key" value="minor"> Minor<br>
+  <select class="dropdown">
+   <option value="A">A</option>
+   <option value="B">B</option>
+   <option value="C">C</option>
+   <option value="D">D</option>
+   <option value="E">E</option>
+   <option value="F">F</option>
+   <option value="G">G</option>
+  </select>
 
-<button type="submit" form="form1" value="Submit">Submit</button>
+<!--    text:<input type="text" name="username"> -->
+<!--    Password:<input type="password" name="password"> -->
+    <input type="submit" value="Submit" class="dropdown">
+</form>
 
 </div>
 
