@@ -1,0 +1,2 @@
+# rosie-app
+my app
