@@ -9,6 +9,7 @@ import(
 
 type PageVars struct {
   Title string
+  Headline string
 }
 
 func main(){
@@ -24,6 +25,7 @@ func main(){
   // when navigating to /home it should serve the home page
   http.HandleFunc("/", Index)
   http.HandleFunc("/home", Home)
+  http.HandleFunc("/home2", Home2)
   http.HandleFunc("/scale", Scale)
   http.ListenAndServe(":8080", nil)
 
@@ -36,19 +38,32 @@ func main(){
 
   //handler for /home renders the home.html page
   func Home(w http.ResponseWriter, req *http.Request){
-    pageVars := PageVars{Title:"This is a string written in main.go"}
+    pageVars := PageVars{
+      Title:"This is a string written in main.go",
+      Headline:"Practice Scales",
+    }
+    render(w, "home.html", pageVars)
+  }
+
+  func Home2(w http.ResponseWriter, req *http.Request){
+    pageVars := PageVars{Title:"This is the same as home but it has a different title"}
     render(w, "home.html", pageVars)
   }
 
 // handler for /scale which parses the values submitted from /home
   func Scale(w http.ResponseWriter, r *http.Request){
-    r.ParseForm() //r is url.Values which is a map[string][]string
-    for key, values := range r.Form {   // range over map
-       for _, value := range values {    // range over []string
-       fmt.Println(key, value) // print all the keys and values to server console
-       fmt.Fprintf(w, " %s : %s\n", key, value) // and print them in the browser
-       }
-     }
+
+
+     pageVars := PageVars{Title:"This is a scale page"}
+     render(w, "home.html", pageVars)
+     r.ParseForm() //r is url.Values which is a map[string][]string
+     for key, values := range r.Form {   // range over map
+        for _, value := range values {    // range over []string
+        fmt.Println(key, value) // print all the keys and values to server console
+        fmt.Fprintf(w, " %s : %s\n", key, value) // and print them in the browser
+        }
+      }
+
   }
 
   func render(w http.ResponseWriter, tmpl string, pageVars PageVars){
@@ -60,7 +75,7 @@ func main(){
       log.Print("template parsing error: ", err) // log it
     }
 
-    err = t.Execute(w, pageVars) //execute the template
+    err = t.Execute(w, pageVars) //execute the template and pass in the variables to fill the gaps
 
     if err != nil { // if there is an error
       log.Print("template executing error: ", err) //log it
