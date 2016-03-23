@@ -6,6 +6,11 @@ import(
    "html/template"
    "log"
 )
+
+type PageVars struct {
+  Title string
+}
+
 func main(){
 
   // this code below makes a file server and serves everything as a file
@@ -31,7 +36,8 @@ func main(){
 
   //handler for /home renders the home.html page
   func Home(w http.ResponseWriter, req *http.Request){
-    render(w, "home.html")
+    pageVars := PageVars{Title:"This is a string written in main.go"}
+    render(w, "home.html", pageVars)
   }
 
 // handler for /scale which parses the values submitted from /home
@@ -45,16 +51,16 @@ func main(){
      }
   }
 
-  func render(w http.ResponseWriter, tmpl string){
+  func render(w http.ResponseWriter, tmpl string, pageVars PageVars){
 
     tmpl = fmt.Sprintf("templates/%s", tmpl) // prefix the name passed in with templates/
-    t, err := template.ParseFiles(tmpl) //parse the template
+    t, err := template.ParseFiles(tmpl) //parse the template file held in the templates folder
 
     if err != nil{ // if there is an error
       log.Print("template parsing error: ", err) // log it
     }
 
-    err = t.Execute(w, "") //execute the template
+    err = t.Execute(w, pageVars) //execute the template
 
     if err != nil { // if there is an error
       log.Print("template executing error: ", err) //log it
