@@ -17,32 +17,32 @@
 
 
 <div class="mainbody">
-<h1>{{.Headline}}</h1>
+
 <p>Select a key and pitch.</p>
 </div>
 
 <div class="keyselect">
 <form action="/scale" method="post">
-  <input type="radio" name="key" value="Major" checked> Major<br>
+  <input type="radio" name="key" value="Major" checked> Major
   <input type="radio" name="key" value="Minor"> Minor<br>
   <div class="pitchselect">
-    <input type="radio" name="pitch" value="A" checked> A <br>
-    <input type="radio" name="pitch" value="B"> B <br>
-    <input type="radio" name="pitch" value="C"> C <br>
-    <input type="radio" name="pitch" value="D"> D <br>
-    <input type="radio" name="pitch" value="E"> E <br>
-    <input type="radio" name="pitch" value="F"> F <br>
-    <input type="radio" name="pitch" value="G"> G <br>
+    <input type="radio" name="pitch" value="A" checked> A
+    <input type="radio" name="pitch" value="B"> B
+    <input type="radio" name="pitch" value="C"> C
+    <input type="radio" name="pitch" value="D"> D
+    <input type="radio" name="pitch" value="E"> E
+    <input type="radio" name="pitch" value="F"> F
+    <input type="radio" name="pitch" value="G"> G
 </div>
 
 <!--    text:<input type="text" name="username"> -->
 <!--    Password:<input type="password" name="password"> -->
-    <input type="submit" value="Submit" class="dropdown">
+    <input type="submit" value="Submit" class="submit">
 </form>
 
 </div>
 
-
+<h1>{{with $1:= .Headline}}{{$1}}{{end}}</h1>
 
 <footer>
 &copy; 2016

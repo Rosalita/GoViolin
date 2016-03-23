@@ -20,7 +20,8 @@ body {
 
 h1 {
     color: #FF974F;
-    margin-left: 20px;
+    margin-left: 40px;
+    margin-top: 20px;
 }
 
 p {
@@ -74,9 +75,19 @@ nav li a:hover {
   padding-top: 25px;
   color: #A49A87;
   margin-left: 50px;
+
+
+
 }
+
+.submit{
+    margin-top: 10px;
+}
+
+
 .pitchselect{
   margin-top: 10px;
+
 
 }
 footer {
