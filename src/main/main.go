@@ -25,7 +25,6 @@ func main(){
   // when navigating to /home it should serve the home page
   http.HandleFunc("/", Index)
   http.HandleFunc("/home", Home)
-  http.HandleFunc("/home2", Home2)
   http.HandleFunc("/scale", Scale)
   http.ListenAndServe(":8080", nil)
 
@@ -39,46 +38,39 @@ func main(){
   //handler for /home renders the home.html page
   func Home(w http.ResponseWriter, req *http.Request){
     pageVars := PageVars{
-      Title:"This is a string written in main.go",
+      Title:"Practice Scale",
       Headline:"Practice Scales",
     }
     render(w, "home.html", pageVars)
   }
 
-  func Home2(w http.ResponseWriter, req *http.Request){
-    pageVars := PageVars{Title:"This is the same as home but it has a different title"}
-    render(w, "home.html", pageVars)
-  }
 
 // handler for /scale which parses the values submitted from /home
   func Scale(w http.ResponseWriter, r *http.Request){
 
-
-     pageVars := PageVars{Title:"This is a scale page"}
-     render(w, "home.html", pageVars)
-     r.ParseForm() //r is url.Values which is a map[string][]string
+  r.ParseForm() //r is url.Values which is a map[string][]string
 
      var svalues []string
-     sstring:= "Scale "
-
      for _, values := range r.Form {   // range over map
         for _, value := range values {    // range over []string
-          svalues = append(svalues, value)
-          sstring += value
-          sstring += " "
-    //    fmt.Println(key, value) // print all the keys and values to server console
-    //    fmt.Fprintf(w, " %s : %s\n", key, value) // and print them in the browser
-
+          svalues = append(svalues, value) // stick each value in a slice I know the name of
         }
       }
- fmt.Println(svalues)
- scaleString:= "Scale "
- scaleString += svalues[0]
- scaleString += " "
- scaleString += svalues[1]
+   sstring:= "This is a scale of "
+      if len(svalues[0]) == 1 {
+        sstring += svalues[0] + " " + svalues[1]
+      } else {
+        sstring += svalues[1] + " " + svalues[0]
+      }
+ fmt.Println(sstring) // generate a string with the name of the scale from the form.
 
- fmt.Println(scaleString)
- fmt.Println(sstring)
+   pageVars := PageVars{
+     Title:sstring,
+     Headline:sstring,
+   }
+   render(w, "home.html", pageVars)
+
+
   }
 
   func render(w http.ResponseWriter, tmpl string, pageVars PageVars){
