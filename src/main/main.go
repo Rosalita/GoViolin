@@ -10,6 +10,8 @@ import(
 type PageVars struct {
   Title string
   Headline string
+  Key string
+  Pitch string
 }
 
 func main(){
@@ -23,8 +25,8 @@ func main(){
   http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
 
   // when navigating to /home it should serve the home page
-  http.HandleFunc("/", Index)
-  http.HandleFunc("/home", Home)
+  http.HandleFunc("/", Home)
+//  http.HandleFunc("/home", Home)
   http.HandleFunc("/scale", Scale)
   http.ListenAndServe(":8080", nil)
 
@@ -57,16 +59,24 @@ func main(){
         }
       }
    sstring:= "This is a scale of "
+   key:= ""
+   pitch:= ""
       if len(svalues[0]) == 1 {
         sstring += svalues[0] + " " + svalues[1]
+        key = svalues[0]
+        pitch = svalues[1]
       } else {
         sstring += svalues[1] + " " + svalues[0]
+        key = svalues[1]
+        pitch = svalues[0]
       }
  fmt.Println(sstring) // generate a string with the name of the scale from the form.
 
    pageVars := PageVars{
      Title:sstring,
      Headline:sstring,
+     Key:key,
+     Pitch:pitch,
    }
    render(w, "home.html", pageVars)
 
