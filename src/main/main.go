@@ -57,13 +57,28 @@ func main(){
      pageVars := PageVars{Title:"This is a scale page"}
      render(w, "home.html", pageVars)
      r.ParseForm() //r is url.Values which is a map[string][]string
-     for key, values := range r.Form {   // range over map
+
+     var svalues []string
+     sstring:= "Scale "
+
+     for _, values := range r.Form {   // range over map
         for _, value := range values {    // range over []string
-        fmt.Println(key, value) // print all the keys and values to server console
-        fmt.Fprintf(w, " %s : %s\n", key, value) // and print them in the browser
+          svalues = append(svalues, value)
+          sstring += value
+          sstring += " "
+    //    fmt.Println(key, value) // print all the keys and values to server console
+    //    fmt.Fprintf(w, " %s : %s\n", key, value) // and print them in the browser
+
         }
       }
+ fmt.Println(svalues)
+ scaleString:= "Scale "
+ scaleString += svalues[0]
+ scaleString += " "
+ scaleString += svalues[1]
 
+ fmt.Println(scaleString)
+ fmt.Println(sstring)
   }
 
   func render(w http.ResponseWriter, tmpl string, pageVars PageVars){
