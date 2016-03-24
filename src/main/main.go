@@ -57,6 +57,8 @@ func Scale(w http.ResponseWriter, r *http.Request){
    sstring:= "This is a scale of "
    key:= ""
    pitch:= ""
+
+  // identify selected key / pitch and generate a string with the name of the scale from the form.
       if len(svalues[0]) == 1 || len(svalues[0]) == 2{
         sstring += svalues[0] + " " + svalues[1]
         key = svalues[0]
@@ -66,10 +68,9 @@ func Scale(w http.ResponseWriter, r *http.Request){
         key = svalues[1]
         pitch = svalues[0]
       }
- fmt.Println(sstring) // generate a string with the name of the scale from the form.
+
  //generate a path to the associated img
- fmt.Printf("pitch is %s\n", pitch)
- fmt.Printf("key is %s\n", key)
+
  path:= "img/"
  if pitch == "Major" {
    path += "major/"
@@ -81,7 +82,6 @@ func Scale(w http.ResponseWriter, r *http.Request){
  path += strings.ToLower(key)
  path += "1.png"
 
- fmt.Println(path)
 
    pageVars := PageVars{
      Title:sstring,
