@@ -76,8 +76,11 @@ nav li a:hover {
   color: #A49A87;
   margin-left: 50px;
 
+}
 
-
+.scale {
+  padding-top: 25px;
+    margin-left: 50px;
 }
 
 .submit{

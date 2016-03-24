@@ -5,6 +5,7 @@ import(
    "net/http"
    "html/template"
    "log"
+   "strings"
 )
 
 type PageVars struct {
@@ -12,6 +13,7 @@ type PageVars struct {
   Headline string
   Key string
   Pitch string
+  ScaleImgPath string
 }
 
 func main(){
@@ -21,8 +23,9 @@ func main(){
   // http.Handle("/", fs)
 
 
-  // serve everything in the css folder as a file
+  // serve everything in the css folder and the img folder as a file
   http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
+  http.Handle("/img/", http.StripPrefix("/img/", http.FileServer(http.Dir("img"))))
 
   // when navigating to /home it should serve the home page
   http.HandleFunc("/", Home)
@@ -54,7 +57,7 @@ func Scale(w http.ResponseWriter, r *http.Request){
    sstring:= "This is a scale of "
    key:= ""
    pitch:= ""
-      if len(svalues[0]) == 1 {
+      if len(svalues[0]) == 1 || len(svalues[0]) == 2{
         sstring += svalues[0] + " " + svalues[1]
         key = svalues[0]
         pitch = svalues[1]
@@ -64,12 +67,28 @@ func Scale(w http.ResponseWriter, r *http.Request){
         pitch = svalues[0]
       }
  fmt.Println(sstring) // generate a string with the name of the scale from the form.
+ //generate a path to the associated img
+ fmt.Printf("pitch is %s\n", pitch)
+ fmt.Printf("key is %s\n", key)
+ path:= "img/"
+ if pitch == "Major" {
+   path += "major/"
+ }
+ if pitch == "Minor" {
+   path += "minor/"
+ }
+
+ path += strings.ToLower(key)
+ path += "1.png"
+
+ fmt.Println(path)
 
    pageVars := PageVars{
      Title:sstring,
      Headline:sstring,
      Key:key,
      Pitch:pitch,
+     ScaleImgPath:path,
    }
    render(w, "home.html", pageVars)
 }

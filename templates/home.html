@@ -27,12 +27,17 @@
   <input type="radio" name="key" value="Minor"> Minor<br>
   <div class="pitchselect">
     <input type="radio" name="pitch" value="A" checked> A
+    <input type="radio" name="pitch" value="Ab"> Ab
     <input type="radio" name="pitch" value="B"> B
+    <input type="radio" name="pitch" value="Bb"> Bb
     <input type="radio" name="pitch" value="C"> C
     <input type="radio" name="pitch" value="D"> D
+    <input type="radio" name="pitch" value="Db"> Db
     <input type="radio" name="pitch" value="E"> E
+    <input type="radio" name="pitch" value="Eb"> Eb
     <input type="radio" name="pitch" value="F"> F
     <input type="radio" name="pitch" value="G"> G
+    <input type="radio" name="pitch" value="Gb"> Gb
 </div>
 
 <!--    text:<input type="text" name="username"> -->
@@ -43,6 +48,12 @@
 </div>
 
 <h1>{{with $1:= .Headline}}{{$1}}{{end}}</h1>
+
+<div class="scale">
+{{with $2:= .ScaleImgPath}}<img src="/{{$2}}">{{end}}
+</div>
+
+<!-- <img src="/img/major/a1.png"> -->
 
 <footer>
 &copy; 2016
