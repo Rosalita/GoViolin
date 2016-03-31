@@ -84,13 +84,11 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 	pitch := ""
 
 	// identify selected key / pitch and generate a string with the name of the scale from the form.
-	if len(svalues[0]) == 1 || len(svalues[0]) == 2 {
-		sstring += svalues[0] + " " + svalues[1]
-		key = svalues[0]
-		pitch = svalues[1]
-	} else {
-		sstring += svalues[1] + " " + svalues[0]
+	if svalues[0] == "Major" || svalues[0] == "Minor" {
 		key = svalues[1]
+		pitch = svalues[0]
+	} else {
+		key = svalues[0]
 		pitch = svalues[0]
 	}
 
@@ -99,9 +97,18 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 	path := "img/"
 	if pitch == "Major" {
 		path += "major/"
+		if len(key)> 1{
+		key = key[3:]
+		}
+	 sstring += key + " " + pitch
+
 	}
 	if pitch == "Minor" {
 		path += "minor/"
+		if len(key)> 1{
+		key = key[:2]
+		}
+		sstring += key + " " + pitch
 	}
 
 	path += strings.ToLower(key)
