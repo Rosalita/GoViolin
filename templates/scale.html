@@ -25,30 +25,8 @@
 </div>
 
 <div class="audio">
-{{with $3:= .AudioPath}}
-<p>Path to audio: {{$2}}  <button id="audiobutton" disabled="true">Audio</button> </p>
-<script>
-var audiobutton = document.getElementById("audiobutton");
-clickme.addEventListener('click',clickHandler);
+{{with $2:= .AudioPath}} <p>Path to audio: {{$2}}  </p>
 
-blip.sampleLoader()
-    .samples({'button': '{{$3}}'})
-    .done(audioLoaded)
-    .load();
-
-function audioLoaded() {
-    buttonClick = blip.clip().sample('button');
-    audiobutton.disabled = false;
-}
-
-function clickHandler(e) {
-    playTone();
-}
-
-function playTone() {
-    buttonClick.play(0);
-}
-</script>
 {{end}}
 
 
