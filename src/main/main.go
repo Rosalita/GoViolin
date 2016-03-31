@@ -113,6 +113,12 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 	}
 
 	path += strings.ToLower(key)
+
+	// if path string contains # replace the # with an s
+	if strings.Contains(path, "#"){
+   path = path[:len(path)-1] // remove the #
+	 path += "s"  // replace it with s
+	}
 	path += "1.png"
 
 	pageVars := PageVars{
