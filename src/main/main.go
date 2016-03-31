@@ -89,7 +89,7 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 		pitch = svalues[0]
 	} else {
 		key = svalues[0]
-		pitch = svalues[0]
+		pitch = svalues[1]
 	}
 
 	//generate a path to the associated img
@@ -103,6 +103,7 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 	 sstring += key + " " + pitch
 
 	}
+
 	if pitch == "Minor" {
 		path += "minor/"
 		if len(key)> 2{
