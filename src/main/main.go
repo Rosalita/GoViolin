@@ -14,6 +14,7 @@ type PageVars struct {
 	Key          string
 	Pitch        string
 	ScaleImgPath string
+	AudioPath    string
 }
 
 func main() {
@@ -119,13 +120,17 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
    path = path[:len(path)-1] // remove the #
 	 path += "s"  // replace it with s
 	}
+	audioPath := path //audioPath is a new copy of the img path
+	audioPath = strings.Replace(audioPath, "img", "wav", 1) // but replace "img" with "wav"
 	path += "1.png"
+	audioPath += "1.wav"
 
 	pageVars := PageVars{
 		Title:     sstring,
 		Key:          key,
 		Pitch:        pitch,
 		ScaleImgPath: path,
+		AudioPath: audioPath,
 	}
 	render(w, "scale.html", pageVars)
 }

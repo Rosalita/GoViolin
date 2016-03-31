@@ -84,6 +84,10 @@ nav li a:hover {
   margin-left: 50px;
   margin-bottom: 20px
 }
+.audio {
+  padding-top: 25px;
+  margin-bottom: 20px
+}
 
 .submit{
     margin-top: 10px;
