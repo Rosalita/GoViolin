@@ -20,6 +20,10 @@
 
 <h1>{{.Title}}</h1>
 
+<div class="scale">
+{{with $2:= .ScaleImgPath}}<img src="/{{$2}}">{{end}}
+</div>
+
 <p>Select a key and pitch.</p>
 </div>
 
@@ -49,11 +53,8 @@
 
 </div>
 
-<h1>{{with $1:= .Headline}}{{$1}}{{end}}</h1>
 
-<div class="scale">
-{{with $2:= .ScaleImgPath}}<img src="/{{$2}}">{{end}}
-</div>
+
 
 <!-- <img src="/img/major/a1.png"> -->
 

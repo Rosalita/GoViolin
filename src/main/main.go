@@ -29,7 +29,7 @@ func main() {
 	// when navigating to /home it should serve the home page
 	http.HandleFunc("/", Home)
 	http.HandleFunc("/scale", Scale)
-		http.HandleFunc("/scaleshow", ScaleShow)
+	http.HandleFunc("/scaleshow", ScaleShow)
 	http.HandleFunc("/arp", Arp)
 	http.HandleFunc("/diary", Diary)
 	http.ListenAndServe(":8080", nil)
@@ -79,7 +79,7 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 			svalues = append(svalues, value) // stick each value in a slice I know the name of
 		}
 	}
-	sstring := "This is a scale of "
+	sstring := "Scale of "
 	key := ""
 	pitch := ""
 
@@ -122,8 +122,7 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 	path += "1.png"
 
 	pageVars := PageVars{
-		Title:        "Practice Scales",
-		Headline:     sstring,
+		Title:     sstring,
 		Key:          key,
 		Pitch:        pitch,
 		ScaleImgPath: path,
