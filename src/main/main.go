@@ -29,6 +29,9 @@ func main() {
 	// when navigating to /home it should serve the home page
 	http.HandleFunc("/", Home)
 	http.HandleFunc("/scale", Scale)
+		http.HandleFunc("/scaleshow", ScaleShow)
+	http.HandleFunc("/arp", Arp)
+	http.HandleFunc("/diary", Diary)
 	http.ListenAndServe(":8080", nil)
 
 }
@@ -36,13 +39,37 @@ func main() {
 //handler for / renders the home.html
 func Home(w http.ResponseWriter, req *http.Request) {
 	pageVars := PageVars{
-		Title: "Practice Scales",
+		Title: "Welcome",
 	}
 	render(w, "home.html", pageVars)
 }
 
+
+func Scale(w http.ResponseWriter, req *http.Request) {
+	pageVars := PageVars{
+		Title: "Practice Scales",
+	}
+	render(w, "scale.html", pageVars)
+}
+
+func Arp(w http.ResponseWriter, req *http.Request) {
+	pageVars := PageVars{
+		Title: "Practice Arpeggios",
+	}
+	render(w, "arp.html", pageVars)
+}
+
+func Diary(w http.ResponseWriter, req *http.Request) {
+	pageVars := PageVars{
+		Title: "Practice Diary",
+	}
+	render(w, "diary.html", pageVars)
+}
+
+
+
 // handler for /scale which parses the values submitted from /home
-func Scale(w http.ResponseWriter, r *http.Request) {
+func ScaleShow(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseForm() //r is url.Values which is a map[string][]string
 
@@ -81,13 +108,13 @@ func Scale(w http.ResponseWriter, r *http.Request) {
 	path += "1.png"
 
 	pageVars := PageVars{
-		Title:        sstring,
+		Title:        "Practice Scales",
 		Headline:     sstring,
 		Key:          key,
 		Pitch:        pitch,
 		ScaleImgPath: path,
 	}
-	render(w, "home.html", pageVars)
+	render(w, "scale.html", pageVars)
 }
 
 func render(w http.ResponseWriter, tmpl string, pageVars PageVars) {

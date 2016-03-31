@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../css/main.css">
+<title>{{.Title}}</title>
+</head>
+<body>
+
+<nav>
+<ul>
+  <li><a href="/">Home</a></li>
+  <li><a class="active" href="scale">Scales</a></li>
+  <li><a href="arp">Arpeggios</a></li>
+  <li><a href="diary">Diary</a></li>
+</ul>
+</nav>
+
+
+<div class="mainbody">
+
+<h1>{{.Title}}</h1>
+
+<p>Select a key and pitch.</p>
+</div>
+
+<div class="keyselect">
+<form action="/scaleshow" method="post">
+  <input type="radio" name="key" value="Major" checked> Major
+  <input type="radio" name="key" value="Minor"> Minor<br>
+  <div class="pitchselect">
+    <input type="radio" name="pitch" value="A" checked> A
+    <input type="radio" name="pitch" value="Ab"> Ab
+    <input type="radio" name="pitch" value="B"> B
+    <input type="radio" name="pitch" value="Bb"> Bb
+    <input type="radio" name="pitch" value="C"> C
+    <input type="radio" name="pitch" value="D"> D
+    <input type="radio" name="pitch" value="Db"> Db
+    <input type="radio" name="pitch" value="E"> E
+    <input type="radio" name="pitch" value="Eb"> Eb
+    <input type="radio" name="pitch" value="F"> F
+    <input type="radio" name="pitch" value="G"> G
+    <input type="radio" name="pitch" value="Gb"> Gb
+</div>
+
+<!--    text:<input type="text" name="username"> -->
+<!--    Password:<input type="password" name="password"> -->
+    <input type="submit" value="Submit" class="submit">
+</form>
+
+</div>
+
+<h1>{{with $1:= .Headline}}{{$1}}{{end}}</h1>
+
+<div class="scale">
+{{with $2:= .ScaleImgPath}}<img src="/{{$2}}">{{end}}
+</div>
+
+<!-- <img src="/img/major/a1.png"> -->
+
+<footer>
+&copy; 2016
+</footer>
+</body>
+</html>
