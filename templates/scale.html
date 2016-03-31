@@ -20,17 +20,26 @@
 
 <h1>{{.Title}}</h1>
 
+{{with $2:= .ScaleImgPath}}
 <div class="scale">
-{{with $2:= .ScaleImgPath}}<img src="/{{$2}}">{{end}}
+  <img src="/{{$2}}">
 </div>
-
-<div class="audio">
-{{with $2:= .AudioPath}} <p>Path to audio: {{$2}}  </p>
-
 {{end}}
 
 
+{{with $3:= .AudioPath}}
+<div class="audio">
+  <p>Path to audio: {{$3}}  </p>
+<audio controls>
+  <source src="/{{$3}}" type="audio/wav">
+Your browser does not support the audio element.
+</audio>
 </div>
+{{end}}
+
+
+
+
 
 <p>Select a key and pitch.</p>
 </div>

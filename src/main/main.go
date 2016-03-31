@@ -23,9 +23,10 @@ func main() {
 	// fs := http.FileServer(http.Dir(""))
 	// http.Handle("/", fs)
 
-	// serve everything in the css folder and the img folder as a file
+	// serve everything in the css folder, the img folder and wav folder as a file
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
 	http.Handle("/img/", http.StripPrefix("/img/", http.FileServer(http.Dir("img"))))
+//	http.Handle("/wav/", http.StripPrefix("/wav/", http.FileServer(http.Dir("wav"))))
 
 	// when navigating to /home it should serve the home page
 	http.HandleFunc("/", Home)
