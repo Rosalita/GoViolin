@@ -68,7 +68,7 @@ func Diary(w http.ResponseWriter, req *http.Request) {
 
 
 
-// handler for /scale which parses the values submitted from /home
+// handler for /scaleshow which parses the values submitted from /scale
 func ScaleShow(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseForm() //r is url.Values which is a map[string][]string
