@@ -97,7 +97,7 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 	path := "img/"
 	if pitch == "Major" {
 		path += "major/"
-		if len(key)> 1{
+		if len(key)> 2{
 		key = key[3:]
 		}
 	 sstring += key + " " + pitch
@@ -105,7 +105,7 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 	}
 	if pitch == "Minor" {
 		path += "minor/"
-		if len(key)> 1{
+		if len(key)> 2{
 		key = key[:2]
 		}
 		sstring += key + " " + pitch
