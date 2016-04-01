@@ -1,1 +1,1 @@
-web ./main
+web: rosie-app -port $PORT
