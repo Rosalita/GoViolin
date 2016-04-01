@@ -21,59 +21,57 @@
 <h1>{{.Title}}</h1>
 
 {{with $2:= .ScaleImgPath}}
-<div class="scale">
-  <img src="/{{$2}}">
-</div>
+  <div class="scale">
+    <img src="/{{$2}}">
+  </div>
 {{end}}
 
 
 {{with $3:= .AudioPath}}
-<div class="audio">
-  <p>Path to audio: {{$3}}  </p>
-<audio controls>
-  <source src="/{{$3}}" type="audio/wav">
-Your browser does not support the audio element.
-</audio>
-</div>
+  <div class ="audioheader">
+    <p>Play scale</p>
+  </div>
+  <div class="audio">
+    <audio controls id="myAudio">
+    <source src="/{{$3}}" type="audio/wav">
+    Your browser does not support the audio element.
+    </audio> <div class ="looptext"><input type="checkbox" name="loop" onclick="loopClicker()">  Loop <br></div>
+  </div>
+<script type="text/javascript">
+  function loopClicker(){
+    if (document.getElementById("myAudio").loop == false){
+      document.getElementById("myAudio").loop = true;
+    } else {
+      document.getElementById("myAudio").loop = false;
+    }
+  }
+</script>
 {{end}}
-
-
-
-
 
 <p>Select a key and pitch.</p>
 </div>
 
 <div class="keyselect">
-<form action="/scaleshow" method="post">
-  <input type="radio" name="key" value="Major" checked> Major
-  <input type="radio" name="key" value="Minor"> Minor<br>
-  <div class="pitchselect">
-    <input type="radio" name="pitch" value="A" checked> A
-    <input type="radio" name="pitch" value="Bb"> Bb
-    <input type="radio" name="pitch" value="B"> B
-    <input type="radio" name="pitch" value="C"> C
-    <input type="radio" name="pitch" value="C#/Db"> C#/Db
-    <input type="radio" name="pitch" value="D"> D
-    <input type="radio" name="pitch" value="Eb"> Eb
-    <input type="radio" name="pitch" value="E"> E
-    <input type="radio" name="pitch" value="F"> F
-    <input type="radio" name="pitch" value="F#/Gb"> F#/Gb
-    <input type="radio" name="pitch" value="G"> G
-    <input type="radio" name="pitch" value="G#/Ab"> G#/Ab
-</div>
-
-<!--    text:<input type="text" name="username"> -->
-<!--    Password:<input type="password" name="password"> -->
+  <form action="/scaleshow" method="post">
+    <input type="radio" name="key" value="Major" checked> Major
+    <input type="radio" name="key" value="Minor"> Minor<br>
+      <div class="pitchselect">
+        <input type="radio" name="pitch" value="A" checked> A
+        <input type="radio" name="pitch" value="Bb"> Bb
+        <input type="radio" name="pitch" value="B"> B
+        <input type="radio" name="pitch" value="C"> C
+        <input type="radio" name="pitch" value="C#/Db"> C#/Db
+        <input type="radio" name="pitch" value="D"> D
+        <input type="radio" name="pitch" value="Eb"> Eb
+        <input type="radio" name="pitch" value="E"> E
+        <input type="radio" name="pitch" value="F"> F
+        <input type="radio" name="pitch" value="F#/Gb"> F#/Gb
+        <input type="radio" name="pitch" value="G"> G
+        <input type="radio" name="pitch" value="G#/Ab"> G#/Ab
+      </div>
     <input type="submit" value="Submit" class="submit">
-</form>
-
+  </form>
 </div>
-
-
-
-
-<!-- <img src="/img/major/a1.png"> -->
 
 <footer>
 &copy; 2016

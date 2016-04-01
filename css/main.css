@@ -82,13 +82,20 @@ nav li a:hover {
 .scale {
   padding-top: 25px;
   margin-left: 50px;
-  margin-bottom: 20px
+  margin-bottom: 5px
 }
 .audio {
-  padding-top: 25px;
+  margin-left: 50px;
   margin-bottom: 20px
 }
+.audioheader {
+    margin-left: 30px;
+    margin-bottom: 10px
+}
 
+.looptext{
+    color: #A49A87;
+}
 .submit{
     margin-top: 10px;
 }
