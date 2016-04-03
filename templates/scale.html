@@ -48,6 +48,27 @@
 </script>
 {{end}}
 
+{{with $4:= .AudioPath2}}
+  <div class ="audioheader">
+    <p>Play melodic minor scale</p>
+  </div>
+  <div class="audio">
+    <audio controls id="myAudio2">
+    <source src="/{{$4}}" type="audio/wav">
+    Your browser does not support the audio element.
+  </audio> <div class ="looptext"><input type="checkbox" name="loop" onclick="loopClicker2()">  Loop <br></div>
+  </div>
+<script type="text/javascript">
+  function loopClicker2(){
+    if (document.getElementById("myAudio2").loop == false){
+      document.getElementById("myAudio2").loop = true;
+    } else {
+      document.getElementById("myAudio2").loop = false;
+    }
+  }
+</script>
+{{end}}
+
 <p>Select a key and pitch.</p>
 </div>
 

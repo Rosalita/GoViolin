@@ -15,6 +15,7 @@ type PageVars struct {
 	Pitch        string
 	ScaleImgPath string
 	AudioPath    string
+	AudioPath2   string
 }
 
 func main() {
@@ -122,9 +123,19 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 	 path += "s"  // replace it with s
 	}
 	audioPath := path //audioPath is a new copy of the img path
+	audioPath2 := "" //declare audiopath2 as a blank string, used for melodic minor scales
 	audioPath = strings.Replace(audioPath, "img", "wav", 1) // but replace "img" with "wav"
 	path += "1.png"
-	audioPath += "1.wav"
+
+
+	if pitch == "Major"{
+			audioPath += "1.wav"
+	} else {
+		 audioPath2 = audioPath
+		 audioPath += "1h.wav"
+		 audioPath2 += "1m.wav"
+	}
+
 
 	pageVars := PageVars{
 		Title:     sstring,
@@ -132,6 +143,7 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 		Pitch:        pitch,
 		ScaleImgPath: path,
 		AudioPath: audioPath,
+		AudioPath2: audioPath2,
 	}
 	render(w, "scale.html", pageVars)
 }
