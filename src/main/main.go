@@ -50,7 +50,9 @@ func Home(w http.ResponseWriter, req *http.Request) {
 
 func Scale(w http.ResponseWriter, req *http.Request) {
 	pageVars := PageVars{
-		Title: "Practice Scales",
+		Title: "Scale of A Major",
+		ScaleImgPath:"img/major/a1.png",
+		AudioPath: "wav/major/a1.wav",
 	}
 	render(w, "scale.html", pageVars)
 }
