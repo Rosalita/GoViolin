@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+<!-- below line adds jQuery to the page -->
+<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js'></script>
 <link rel="stylesheet" type="text/css" href="../css/main.css">
 <title>{{.Title}}</title>
 </head>
@@ -17,6 +19,22 @@
 
 
 <div class="mainbody">
+
+<p>Select a key and pitch.</p>
+</div>
+
+<div class="pitchselect">
+  <form action="/scaleshow" method="post">
+    {{range .PitchOptions}}
+    <input type="radio" name={{.Name}} value={{.Value}} {{if .IsChecked}}checked{{end}}> {{.Text}}
+    {{end}}
+      <div class="keyselect">
+        {{range .KeyOptions}}
+        <input type="radio" name={{.Name}} value={{.Value}} {{if .IsChecked}}checked{{end}}> {{.Text}}
+        {{end}}
+      </div>
+  </form>
+</div>
 
 <h1>{{.Title}}</h1>
 
@@ -48,30 +66,42 @@
 </script>
 {{end}}
 
-<p>Select a key and pitch.</p>
-</div>
+{{with $4:= .AudioPath2}}
+  <div class ="audioheader">
+    <p>Play melodic minor scale</p>
+  </div>
+  <div class="audio">
+    <audio controls id="myAudio2">
+    <source src="/{{$4}}" type="audio/wav">
+    Your browser does not support the audio element.
+  </audio> <div class ="looptext"><input type="checkbox" name="loop" onclick="loopClicker2()">  Loop <br></div>
+  </div>
+<script type="text/javascript">
+  function loopClicker2(){
+    if (document.getElementById("myAudio2").loop == false){
+      document.getElementById("myAudio2").loop = true;
+    } else {
+      document.getElementById("myAudio2").loop = false;
+    }
+  }
+</script>
+{{end}}
 
-<div class="keyselect">
-  <form action="/scaleshow" method="post">
-    <input type="radio" name="key" value="Major" checked> Major
-    <input type="radio" name="key" value="Minor"> Minor<br>
-      <div class="pitchselect">
-        <input type="radio" name="pitch" value="A" checked> A
-        <input type="radio" name="pitch" value="Bb"> Bb
-        <input type="radio" name="pitch" value="B"> B
-        <input type="radio" name="pitch" value="C"> C
-        <input type="radio" name="pitch" value="C#/Db"> C#/Db
-        <input type="radio" name="pitch" value="D"> D
-        <input type="radio" name="pitch" value="Eb"> Eb
-        <input type="radio" name="pitch" value="E"> E
-        <input type="radio" name="pitch" value="F"> F
-        <input type="radio" name="pitch" value="F#/Gb"> F#/Gb
-        <input type="radio" name="pitch" value="G"> G
-        <input type="radio" name="pitch" value="G#/Ab"> G#/Ab
-      </div>
-    <input type="submit" value="Submit" class="submit">
-  </form>
-</div>
+
+<!-- some jquery to make the scale selection form submit itself if the user changes the pitch or key radio buttons -->
+<script type='text/javascript'>
+ $(document).ready(function() {
+   $('input[name=Key]').change(function(){
+     $('form').submit();
+   });
+});
+$(document).ready(function() {
+  $('input[name=Pitch]').change(function(){
+    $('form').submit();
+  });
+});
+</script>
+
 
 <footer>
 &copy; 2016

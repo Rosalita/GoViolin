@@ -69,10 +69,10 @@ nav li a:hover {
 }
 
 .mainbody{
-  padding-top: 50px;
+  padding-top: 75px;
 }
 
-.keyselect{
+.pitchselect{
   padding-top: 25px;
   color: #A49A87;
   margin-left: 50px;
@@ -100,12 +100,11 @@ nav li a:hover {
     margin-top: 10px;
 }
 
-
-.pitchselect{
+.keyselect{
   margin-top: 10px;
-
-
+  color: #A49A87;
 }
+
 footer {
   padding-top: 75px;
   color: #A49A87;
