@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+<!-- below line adds jQuery to the page -->
+<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js'></script>
 <link rel="stylesheet" type="text/css" href="../css/main.css">
 <title>{{.Title}}</title>
 </head>
@@ -17,6 +19,22 @@
 
 
 <div class="mainbody">
+
+<p>Select a key and pitch.</p>
+</div>
+
+<div class="pitchselect">
+  <form action="/scaleshow" method="post">
+    {{range .PitchOptions}}
+    <input type="radio" name={{.Name}} value={{.Value}} {{if .IsChecked}}checked{{end}}> {{.Text}}
+    {{end}}
+      <div class="keyselect">
+        {{range .KeyOptions}}
+        <input type="radio" name={{.Name}} value={{.Value}} {{if .IsChecked}}checked{{end}}> {{.Text}}
+        {{end}}
+      </div>
+  </form>
+</div>
 
 <h1>{{.Title}}</h1>
 
@@ -69,22 +87,21 @@
 </script>
 {{end}}
 
-<p>Select a key and pitch.</p>
-</div>
 
-<div class="pitchselect">
-  <form action="/scaleshow" method="post">
-    {{range .PitchOptions}}
-    <input type="radio" name={{.Name}} value={{.Value}} {{if .IsChecked}}checked{{end}}> {{.Text}}
-    {{end}}
-      <div class="keyselect">
-        {{range .KeyOptions}}
-        <input type="radio" name={{.Name}} value={{.Value}} {{if .IsChecked}}checked{{end}}> {{.Text}}
-        {{end}}
-      </div>
-    <input type="submit" value="Select Scale" class="submit">
-  </form>
-</div>
+<!-- some jquery to make the scale selection form submit itself if the user changes the pitch or key radio buttons -->
+<script type='text/javascript'>
+ $(document).ready(function() {
+   $('input[name=Key]').change(function(){
+     $('form').submit();
+   });
+});
+$(document).ready(function() {
+  $('input[name=Pitch]').change(function(){
+    $('form').submit();
+  });
+});
+</script>
+
 
 <footer>
 &copy; 2016
