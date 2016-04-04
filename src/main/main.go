@@ -16,6 +16,14 @@ type PageVars struct {
 	ScaleImgPath string
 	AudioPath    string
 	AudioPath2   string
+	PitchOptions []PitchOptions
+}
+
+type PitchOptions struct {
+  Name string
+	Value string
+	IsChecked bool
+	Text string
 }
 
 func main() {
@@ -23,6 +31,8 @@ func main() {
 	// this code below makes a file server and serves everything as a file
 	// fs := http.FileServer(http.Dir(""))
 	// http.Handle("/", fs)
+
+
 
 	// serve everything in the css folder, the img folder and wav folder as a file
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
@@ -49,10 +59,17 @@ func Home(w http.ResponseWriter, req *http.Request) {
 
 
 func Scale(w http.ResponseWriter, req *http.Request) {
+	//populate the default PitchOptions for scales
+	pOptions := []PitchOptions{
+		PitchOptions{"Pitch", "Major", true, "Major"},
+		PitchOptions{"Pitch", "Minor", false, "Minor"},
+	}
+
 	pageVars := PageVars{
 		Title: "Scale of A Major",
 		ScaleImgPath:"img/major/a1.png",
 		AudioPath: "wav/major/a1.wav",
+		PitchOptions: pOptions,
 	}
 	render(w, "scale.html", pageVars)
 }
@@ -75,6 +92,13 @@ func Diary(w http.ResponseWriter, req *http.Request) {
 
 // handler for /scaleshow which parses the values submitted from /scale
 func ScaleShow(w http.ResponseWriter, r *http.Request) {
+
+	//populate the default PitchOptions for scales
+	pOptions := []PitchOptions{
+		PitchOptions{"Pitch", "Major", true, "Major"},
+		PitchOptions{"Pitch", "Minor", false, "Minor"},
+	}
+
 
 	r.ParseForm() //r is url.Values which is a map[string][]string
 
@@ -102,6 +126,12 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 	path := "img/"
 	if pitch == "Major" {
 		path += "major/"
+
+		pOptions = []PitchOptions{
+			PitchOptions{"Pitch", "Major", true, "Major"},
+			PitchOptions{"Pitch", "Minor", false, "Minor"},
+		}
+
 		if len(key)> 2{
 		key = key[3:]
 		}
@@ -111,6 +141,12 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 
 	if pitch == "Minor" {
 		path += "minor/"
+
+		pOptions = []PitchOptions{
+			PitchOptions{"Pitch", "Major", false, "Major"},
+			PitchOptions{"Pitch", "Minor", true, "Minor"},
+		}
+
 		if len(key)> 2{
 		key = key[:2]
 		}
@@ -146,6 +182,7 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 		ScaleImgPath: path,
 		AudioPath: audioPath,
 		AudioPath2: audioPath2,
+		PitchOptions: pOptions,
 	}
 	render(w, "scale.html", pageVars)
 }

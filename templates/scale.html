@@ -74,8 +74,11 @@
 
 <div class="pitchselect">
   <form action="/scaleshow" method="post">
-    <input type="radio" name="pitch" value="Major" checked> Major
-    <input type="radio" name="pitch" value="Minor"> Minor<br>
+    {{range .PitchOptions}}
+    <input type="radio" name={{.Name}} value={{.Value}} {{if .IsChecked}}checked{{end}}> {{.Text}}
+    {{end}}
+  <!--  <input type="radio" name="pitch" value="Major" checked> Major
+    <input type="radio" name="pitch" value="Minor"> Minor<br> -->
       <div class="keyselect">
         <input type="radio" name="key" value="A" checked> A
         <input type="radio" name="key" value="Bb"> Bb
