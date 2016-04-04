@@ -77,10 +77,12 @@
     {{range .PitchOptions}}
     <input type="radio" name={{.Name}} value={{.Value}} {{if .IsChecked}}checked{{end}}> {{.Text}}
     {{end}}
-  <!--  <input type="radio" name="pitch" value="Major" checked> Major
-    <input type="radio" name="pitch" value="Minor"> Minor<br> -->
       <div class="keyselect">
-        <input type="radio" name="key" value="A" checked> A
+        {{range .KeyOptions}}
+        <input type="radio" name={{.Name}} value={{.Value}} {{if .IsChecked}}checked{{end}}> {{.Text}}
+        {{end}}
+
+      <!--  <input type="radio" name="key" value="A" checked> A
         <input type="radio" name="key" value="Bb"> Bb
         <input type="radio" name="key" value="B"> B
         <input type="radio" name="key" value="C"> C
@@ -91,7 +93,7 @@
         <input type="radio" name="key" value="F"> F
         <input type="radio" name="key" value="F#/Gb"> F#/Gb
         <input type="radio" name="key" value="G"> G
-        <input type="radio" name="key" value="G#/Ab"> G#/Ab
+        <input type="radio" name="key" value="G#/Ab"> G#/Ab -->
       </div>
     <input type="submit" value="Select Scale" class="submit">
   </form>

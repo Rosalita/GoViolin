@@ -16,14 +16,15 @@ type PageVars struct {
 	ScaleImgPath string
 	AudioPath    string
 	AudioPath2   string
-	PitchOptions []PitchOptions
+	PitchOptions []ScaleOptions
+	KeyOptions   []ScaleOptions
 }
 
-type PitchOptions struct {
-  Name string
-	Value string
+type ScaleOptions struct {
+	Name      string
+	Value     string
 	IsChecked bool
-	Text string
+	Text      string
 }
 
 func main() {
@@ -31,8 +32,6 @@ func main() {
 	// this code below makes a file server and serves everything as a file
 	// fs := http.FileServer(http.Dir(""))
 	// http.Handle("/", fs)
-
-
 
 	// serve everything in the css folder, the img folder and wav folder as a file
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
@@ -57,19 +56,36 @@ func Home(w http.ResponseWriter, req *http.Request) {
 	render(w, "home.html", pageVars)
 }
 
-
 func Scale(w http.ResponseWriter, req *http.Request) {
 	//populate the default PitchOptions for scales
-	pOptions := []PitchOptions{
-		PitchOptions{"Pitch", "Major", true, "Major"},
-		PitchOptions{"Pitch", "Minor", false, "Minor"},
+	pOptions := []ScaleOptions{
+		ScaleOptions{"Pitch", "Major", true, "Major"},
+		ScaleOptions{"Pitch", "Minor", false, "Minor"},
 	}
 
+	// populate the default KeyOptions for scales
+	kOptions := []ScaleOptions{
+		ScaleOptions{"Key", "A", true, "A"},
+		ScaleOptions{"Key", "Bb", false, "Bb"},
+		ScaleOptions{"Key", "B", false, "B"},
+		ScaleOptions{"Key", "C", false, "C"},
+		ScaleOptions{"Key", "C#/Db", false, "C#/Db"},
+		ScaleOptions{"Key", "D", false, "D"},
+		ScaleOptions{"Key", "Eb", false, "Eb"},
+		ScaleOptions{"Key", "E", false, "E"},
+		ScaleOptions{"Key", "F", false, "F"},
+		ScaleOptions{"Key", "F#/Gb", false, "F#/Gb"},
+		ScaleOptions{"Key", "G", false, "G"},
+		ScaleOptions{"Key", "G#/Ab", false, "G#/Ab"},
+	}
+
+	// set page variables
 	pageVars := PageVars{
-		Title: "Scale of A Major",
-		ScaleImgPath:"img/major/a1.png",
-		AudioPath: "wav/major/a1.wav",
+		Title:        "Scale of A Major",
+		ScaleImgPath: "img/major/a1.png",
+		AudioPath:    "wav/major/a1.wav",
 		PitchOptions: pOptions,
+		KeyOptions:   kOptions,
 	}
 	render(w, "scale.html", pageVars)
 }
@@ -88,17 +104,30 @@ func Diary(w http.ResponseWriter, req *http.Request) {
 	render(w, "diary.html", pageVars)
 }
 
-
-
 // handler for /scaleshow which parses the values submitted from /scale
 func ScaleShow(w http.ResponseWriter, r *http.Request) {
 
 	//populate the default PitchOptions for scales
-	pOptions := []PitchOptions{
-		PitchOptions{"Pitch", "Major", true, "Major"},
-		PitchOptions{"Pitch", "Minor", false, "Minor"},
+	pOptions := []ScaleOptions{
+		ScaleOptions{"Pitch", "Major", true, "Major"},
+		ScaleOptions{"Pitch", "Minor", false, "Minor"},
 	}
 
+	// populate the default KeyOptions for scales
+	kOptions := []ScaleOptions{
+		ScaleOptions{"Key", "A", true, "A"},
+		ScaleOptions{"Key", "Bb", false, "Bb"},
+		ScaleOptions{"Key", "B", false, "B"},
+		ScaleOptions{"Key", "C", false, "C"},
+		ScaleOptions{"Key", "C#/Db", false, "C#/Db"},
+		ScaleOptions{"Key", "D", false, "D"},
+		ScaleOptions{"Key", "Eb", false, "Eb"},
+		ScaleOptions{"Key", "E", false, "E"},
+		ScaleOptions{"Key", "F", false, "F"},
+		ScaleOptions{"Key", "F#/Gb", false, "F#/Gb"},
+		ScaleOptions{"Key", "G", false, "G"},
+		ScaleOptions{"Key", "G#/Ab", false, "G#/Ab"},
+	}
 
 	r.ParseForm() //r is url.Values which is a map[string][]string
 
@@ -121,34 +150,218 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 		pitch = svalues[1]
 	}
 
-	//generate a path to the associated img
+	// set the selected key's IsChecked value to true so can persist radio button selection
+	switch key {
+	case "A":
+		kOptions = []ScaleOptions{
+			ScaleOptions{"Key", "A", true, "A"},
+			ScaleOptions{"Key", "Bb", false, "Bb"},
+			ScaleOptions{"Key", "B", false, "B"},
+			ScaleOptions{"Key", "C", false, "C"},
+			ScaleOptions{"Key", "C#/Db", false, "C#/Db"},
+			ScaleOptions{"Key", "D", false, "D"},
+			ScaleOptions{"Key", "Eb", false, "Eb"},
+			ScaleOptions{"Key", "E", false, "E"},
+			ScaleOptions{"Key", "F", false, "F"},
+			ScaleOptions{"Key", "F#/Gb", false, "F#/Gb"},
+			ScaleOptions{"Key", "G", false, "G"},
+			ScaleOptions{"Key", "G#/Ab", false, "G#/Ab"},
+		}
+	case "Bb":
+		kOptions = []ScaleOptions{
+			ScaleOptions{"Key", "A", false, "A"},
+			ScaleOptions{"Key", "Bb", true, "Bb"},
+			ScaleOptions{"Key", "B", false, "B"},
+			ScaleOptions{"Key", "C", false, "C"},
+			ScaleOptions{"Key", "C#/Db", false, "C#/Db"},
+			ScaleOptions{"Key", "D", false, "D"},
+			ScaleOptions{"Key", "Eb", false, "Eb"},
+			ScaleOptions{"Key", "E", false, "E"},
+			ScaleOptions{"Key", "F", false, "F"},
+			ScaleOptions{"Key", "F#/Gb", false, "F#/Gb"},
+			ScaleOptions{"Key", "G", false, "G"},
+			ScaleOptions{"Key", "G#/Ab", false, "G#/Ab"},
+		}
+	case "B":
+		kOptions = []ScaleOptions{
+			ScaleOptions{"Key", "A", false, "A"},
+			ScaleOptions{"Key", "Bb", false, "Bb"},
+			ScaleOptions{"Key", "B", true, "B"},
+			ScaleOptions{"Key", "C", false, "C"},
+			ScaleOptions{"Key", "C#/Db", false, "C#/Db"},
+			ScaleOptions{"Key", "D", false, "D"},
+			ScaleOptions{"Key", "Eb", false, "Eb"},
+			ScaleOptions{"Key", "E", false, "E"},
+			ScaleOptions{"Key", "F", false, "F"},
+			ScaleOptions{"Key", "F#/Gb", false, "F#/Gb"},
+			ScaleOptions{"Key", "G", false, "G"},
+			ScaleOptions{"Key", "G#/Ab", false, "G#/Ab"},
+		}
+	case "C":
+		kOptions = []ScaleOptions{
+			ScaleOptions{"Key", "A", false, "A"},
+			ScaleOptions{"Key", "Bb", false, "Bb"},
+			ScaleOptions{"Key", "B", false, "B"},
+			ScaleOptions{"Key", "C", true, "C"},
+			ScaleOptions{"Key", "C#/Db", false, "C#/Db"},
+			ScaleOptions{"Key", "D", false, "D"},
+			ScaleOptions{"Key", "Eb", false, "Eb"},
+			ScaleOptions{"Key", "E", false, "E"},
+			ScaleOptions{"Key", "F", false, "F"},
+			ScaleOptions{"Key", "F#/Gb", false, "F#/Gb"},
+			ScaleOptions{"Key", "G", false, "G"},
+			ScaleOptions{"Key", "G#/Ab", false, "G#/Ab"},
+		}
+	case "C#/Db":
+		kOptions = []ScaleOptions{
+			ScaleOptions{"Key", "A", false, "A"},
+			ScaleOptions{"Key", "Bb", false, "Bb"},
+			ScaleOptions{"Key", "B", false, "B"},
+			ScaleOptions{"Key", "C", false, "C"},
+			ScaleOptions{"Key", "C#/Db", true, "C#/Db"},
+			ScaleOptions{"Key", "D", false, "D"},
+			ScaleOptions{"Key", "Eb", false, "Eb"},
+			ScaleOptions{"Key", "E", false, "E"},
+			ScaleOptions{"Key", "F", false, "F"},
+			ScaleOptions{"Key", "F#/Gb", false, "F#/Gb"},
+			ScaleOptions{"Key", "G", false, "G"},
+			ScaleOptions{"Key", "G#/Ab", false, "G#/Ab"},
+		}
+	case "D":
+		kOptions = []ScaleOptions{
+			ScaleOptions{"Key", "A", false, "A"},
+			ScaleOptions{"Key", "Bb", false, "Bb"},
+			ScaleOptions{"Key", "B", false, "B"},
+			ScaleOptions{"Key", "C", false, "C"},
+			ScaleOptions{"Key", "C#/Db", false, "C#/Db"},
+			ScaleOptions{"Key", "D", true, "D"},
+			ScaleOptions{"Key", "Eb", false, "Eb"},
+			ScaleOptions{"Key", "E", false, "E"},
+			ScaleOptions{"Key", "F", false, "F"},
+			ScaleOptions{"Key", "F#/Gb", false, "F#/Gb"},
+			ScaleOptions{"Key", "G", false, "G"},
+			ScaleOptions{"Key", "G#/Ab", false, "G#/Ab"},
+		}
+	case "Eb":
+		kOptions = []ScaleOptions{
+			ScaleOptions{"Key", "A", false, "A"},
+			ScaleOptions{"Key", "Bb", false, "Bb"},
+			ScaleOptions{"Key", "B", false, "B"},
+			ScaleOptions{"Key", "C", false, "C"},
+			ScaleOptions{"Key", "C#/Db", false, "C#/Db"},
+			ScaleOptions{"Key", "D", false, "D"},
+			ScaleOptions{"Key", "Eb", true, "Eb"},
+			ScaleOptions{"Key", "E", false, "E"},
+			ScaleOptions{"Key", "F", false, "F"},
+			ScaleOptions{"Key", "F#/Gb", false, "F#/Gb"},
+			ScaleOptions{"Key", "G", false, "G"},
+			ScaleOptions{"Key", "G#/Ab", false, "G#/Ab"},
+		}
+	case "E":
+		kOptions = []ScaleOptions{
+			ScaleOptions{"Key", "A", false, "A"},
+			ScaleOptions{"Key", "Bb", false, "Bb"},
+			ScaleOptions{"Key", "B", false, "B"},
+			ScaleOptions{"Key", "C", false, "C"},
+			ScaleOptions{"Key", "C#/Db", false, "C#/Db"},
+			ScaleOptions{"Key", "D", false, "D"},
+			ScaleOptions{"Key", "Eb", false, "Eb"},
+			ScaleOptions{"Key", "E", true, "E"},
+			ScaleOptions{"Key", "F", false, "F"},
+			ScaleOptions{"Key", "F#/Gb", false, "F#/Gb"},
+			ScaleOptions{"Key", "G", false, "G"},
+			ScaleOptions{"Key", "G#/Ab", false, "G#/Ab"},
+		}
+	case "F":
+		kOptions = []ScaleOptions{
+			ScaleOptions{"Key", "A", false, "A"},
+			ScaleOptions{"Key", "Bb", false, "Bb"},
+			ScaleOptions{"Key", "B", false, "B"},
+			ScaleOptions{"Key", "C", false, "C"},
+			ScaleOptions{"Key", "C#/Db", false, "C#/Db"},
+			ScaleOptions{"Key", "D", false, "D"},
+			ScaleOptions{"Key", "Eb", false, "Eb"},
+			ScaleOptions{"Key", "E", false, "E"},
+			ScaleOptions{"Key", "F", true, "F"},
+			ScaleOptions{"Key", "F#/Gb", false, "F#/Gb"},
+			ScaleOptions{"Key", "G", false, "G"},
+			ScaleOptions{"Key", "G#/Ab", false, "G#/Ab"},
+		}
+	case "F#/Gb":
+		kOptions = []ScaleOptions{
+			ScaleOptions{"Key", "A", false, "A"},
+			ScaleOptions{"Key", "Bb", false, "Bb"},
+			ScaleOptions{"Key", "B", false, "B"},
+			ScaleOptions{"Key", "C", false, "C"},
+			ScaleOptions{"Key", "C#/Db", false, "C#/Db"},
+			ScaleOptions{"Key", "D", false, "D"},
+			ScaleOptions{"Key", "Eb", false, "Eb"},
+			ScaleOptions{"Key", "E", false, "E"},
+			ScaleOptions{"Key", "F", false, "F"},
+			ScaleOptions{"Key", "F#/Gb", true, "F#/Gb"},
+			ScaleOptions{"Key", "G", false, "G"},
+			ScaleOptions{"Key", "G#/Ab", false, "G#/Ab"},
+		}
+	case "G":
+		kOptions = []ScaleOptions{
+			ScaleOptions{"Key", "A", false, "A"},
+			ScaleOptions{"Key", "Bb", false, "Bb"},
+			ScaleOptions{"Key", "B", false, "B"},
+			ScaleOptions{"Key", "C", false, "C"},
+			ScaleOptions{"Key", "C#/Db", false, "C#/Db"},
+			ScaleOptions{"Key", "D", false, "D"},
+			ScaleOptions{"Key", "Eb", false, "Eb"},
+			ScaleOptions{"Key", "E", false, "E"},
+			ScaleOptions{"Key", "F", false, "F"},
+			ScaleOptions{"Key", "F#/Gb", false, "F#/Gb"},
+			ScaleOptions{"Key", "G", true, "G"},
+			ScaleOptions{"Key", "G#/Ab", false, "G#/Ab"},
+		}
 
+	case "G#/Ab":
+		kOptions = []ScaleOptions{
+			ScaleOptions{"Key", "A", false, "A"},
+			ScaleOptions{"Key", "Bb", false, "Bb"},
+			ScaleOptions{"Key", "B", false, "B"},
+			ScaleOptions{"Key", "C", false, "C"},
+			ScaleOptions{"Key", "C#/Db", false, "C#/Db"},
+			ScaleOptions{"Key", "D", false, "D"},
+			ScaleOptions{"Key", "Eb", false, "Eb"},
+			ScaleOptions{"Key", "E", false, "E"},
+			ScaleOptions{"Key", "F", false, "F"},
+			ScaleOptions{"Key", "F#/Gb", false, "F#/Gb"},
+			ScaleOptions{"Key", "G", false, "G"},
+			ScaleOptions{"Key", "G#/Ab", true, "G#/Ab"},
+		}
+	}
+
+	//generate a path to the associated img
 	path := "img/"
 	if pitch == "Major" {
 		path += "major/"
 
-		pOptions = []PitchOptions{
-			PitchOptions{"Pitch", "Major", true, "Major"},
-			PitchOptions{"Pitch", "Minor", false, "Minor"},
+		pOptions = []ScaleOptions{
+			ScaleOptions{"Pitch", "Major", true, "Major"},
+			ScaleOptions{"Pitch", "Minor", false, "Minor"},
 		}
 
-		if len(key)> 2{
-		key = key[3:]
+		if len(key) > 2 {
+			key = key[3:]
 		}
-	 sstring += key + " " + pitch
+		sstring += key + " " + pitch
 
 	}
 
 	if pitch == "Minor" {
 		path += "minor/"
 
-		pOptions = []PitchOptions{
-			PitchOptions{"Pitch", "Major", false, "Major"},
-			PitchOptions{"Pitch", "Minor", true, "Minor"},
+		pOptions = []ScaleOptions{
+			ScaleOptions{"Pitch", "Major", false, "Major"},
+			ScaleOptions{"Pitch", "Minor", true, "Minor"},
 		}
 
-		if len(key)> 2{
-		key = key[:2]
+		if len(key) > 2 {
+			key = key[:2]
 		}
 		sstring += key + " " + pitch
 	}
@@ -156,33 +369,32 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 	path += strings.ToLower(key)
 
 	// if path string contains # replace the # with an s
-	if strings.Contains(path, "#"){
-   path = path[:len(path)-1] // remove the #
-	 path += "s"  // replace it with s
+	if strings.Contains(path, "#") {
+		path = path[:len(path)-1] // remove the #
+		path += "s"               // replace it with s
 	}
-	audioPath := path //audioPath is a new copy of the img path
-	audioPath2 := "" //declare audiopath2 as a blank string, used for melodic minor scales
+	audioPath := path                                       //audioPath is a new copy of the img path
+	audioPath2 := ""                                        //declare audiopath2 as a blank string, used for melodic minor scales
 	audioPath = strings.Replace(audioPath, "img", "wav", 1) // but replace "img" with "wav"
 	path += "1.png"
 
-
-	if pitch == "Major"{
-			audioPath += "1.wav"
+	if pitch == "Major" {
+		audioPath += "1.wav"
 	} else {
-		 audioPath2 = audioPath
-		 audioPath += "1h.wav"
-		 audioPath2 += "1m.wav"
+		audioPath2 = audioPath
+		audioPath += "1h.wav"
+		audioPath2 += "1m.wav"
 	}
 
-
 	pageVars := PageVars{
-		Title:     sstring,
+		Title:        sstring,
 		Key:          key,
 		Pitch:        pitch,
 		ScaleImgPath: path,
-		AudioPath: audioPath,
-		AudioPath2: audioPath2,
+		AudioPath:    audioPath,
+		AudioPath2:   audioPath2,
 		PitchOptions: pOptions,
+		KeyOptions:   kOptions,
 	}
 	render(w, "scale.html", pageVars)
 }
