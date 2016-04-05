@@ -86,12 +86,25 @@ nav li a:hover {
 }
 .audio {
   margin-left: 50px;
-  margin-bottom: 20px
+  margin-bottom: 20px;
+  float: left;
 }
+.audio2 {
+  margin-left: 50px;
+  margin-bottom: 20px;
+  float: left;
+}
+
 .audioheader {
-    margin-left: 30px;
-    margin-bottom: 10px
+    margin-left: 50px;
+    margin-bottom: 10px;
+    text-align:left;
+    color: #FF974F;
 }
+.scale1name {
+margin-right:270px;
+}
+
 
 .looptext{
     color: #A49A87;
@@ -103,6 +116,10 @@ nav li a:hover {
 .keyselect{
   margin-top: 10px;
   color: #A49A87;
+}
+
+.indent{
+  margin-left: 30px;
 }
 
 footer {
