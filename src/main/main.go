@@ -18,6 +18,7 @@ type PageVars struct {
 	AudioPath2   string
 	PitchOptions []ScaleOptions
 	KeyOptions   []ScaleOptions
+	OctaveOptions []ScaleOptions
 }
 
 type ScaleOptions struct {
@@ -79,6 +80,12 @@ func Scale(w http.ResponseWriter, req *http.Request) {
 		ScaleOptions{"Key", "G#/Ab", false, "G#/Ab"},
 	}
 
+  // populate the default OctaveOptions for scales
+  oOptions := []ScaleOptions{
+		ScaleOptions{"Octave", "1", true, "1"},
+		ScaleOptions{"Octave", "2", false, "2"},
+	}
+
 	// set page variables
 	pageVars := PageVars{
 		Title:        "Scale of A Major", // default scale initially displayed is A Major
@@ -88,6 +95,7 @@ func Scale(w http.ResponseWriter, req *http.Request) {
 		Key:          "A",
 		PitchOptions: pOptions,
 		KeyOptions:   kOptions,
+		OctaveOptions: oOptions,
 	}
 	render(w, "scale.html", pageVars)
 }
@@ -131,6 +139,12 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 		ScaleOptions{"Key", "G#/Ab", false, "G#/Ab"},
 	}
 
+  // populate the default OctaveOptions for scales
+	oOptions := []ScaleOptions{
+		ScaleOptions{"Octave", "1", true, "1"},
+		ScaleOptions{"Octave", "2", false, "2"},
+	}
+
 	r.ParseForm() //r is url.Values which is a map[string][]string
 
 	var svalues []string
@@ -142,15 +156,42 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 	sstring := "Scale of "
 	key := ""
 	pitch := ""
+	octave := ""
 
-	// identify selected key / pitch and generate a string with the name of the scale from the form.
-	if svalues[0] == "Major" || svalues[0] == "Minor" {
-		key = svalues[1]
-		pitch = svalues[0]
-	} else {
-		key = svalues[0]
-		pitch = svalues[1]
+	// identify selected key / pitch / octave and generate a string with the name of the scale from the form.
+
+for i:= 0; i < 3; i++{
+	switch svalues[i] {
+	case "Major":
+		pitch = svalues[i]
+  case "Minor":
+		pitch = svalues[i]
+  case "1":
+		octave = svalues[i]
+	case "2":
+		octave = svalues[i]
+  default:
+		key = svalues[i]
 	}
+}
+
+fmt.Println(octave)
+//	if svalues[0] == "Major" || svalues[0] == "Minor" {
+//		pitch = svalues[0]
+//		if svalues[1] == "1" || svalues[1] == "2"  {
+//			octave = svalues[1]
+//			key = svalues[2]
+//		}
+//	}
+
+//	if svalues[1] == "Major" || svalues[1] == "Minor" {
+//		pitch = svalues[1]
+//		if svalues[0] == "1" || svalues[0] == "2"  {
+//			octave = svalues[0]
+//			key = svalues[2]
+//		}
+//	}
+
 
 	// set the selected key's IsChecked value to true so can persist radio button selection
 	switch key {
@@ -397,6 +438,7 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 		AudioPath2:   audioPath2,
 		PitchOptions: pOptions,
 		KeyOptions:   kOptions,
+		OctaveOptions: oOptions,
 	}
 	render(w, "scale.html", pageVars)
 }

@@ -33,6 +33,11 @@
         <input type="radio" name={{.Name}} value={{.Value}} {{if .IsChecked}}checked{{end}}> {{.Text}}
         {{end}}
       </div>
+      <div class="octaveselect">
+      {{range .OctaveOptions}}
+      <input type="radio" name={{.Name}} value={{.Value}} {{if .IsChecked}}checked{{end}}> {{.Text}}
+      {{end}}
+    </div>
   </form>
 </div>
 
