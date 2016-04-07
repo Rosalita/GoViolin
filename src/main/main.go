@@ -81,9 +81,11 @@ func Scale(w http.ResponseWriter, req *http.Request) {
 
 	// set page variables
 	pageVars := PageVars{
-		Title:        "Scale of A Major",
+		Title:        "Scale of A Major", // default scale initially displayed is A Major
 		ScaleImgPath: "img/major/a1.png",
 		AudioPath:    "wav/major/a1.wav",
+		Pitch:        "Major",
+		Key:          "A",
 		PitchOptions: pOptions,
 		KeyOptions:   kOptions,
 	}
