@@ -9,15 +9,15 @@ import (
 )
 
 type PageVars struct {
-	Title        string
-	Headline     string
-	Key          string
-	Pitch        string
-	ScaleImgPath string
-	AudioPath    string
-	AudioPath2   string
-	PitchOptions []ScaleOptions
-	KeyOptions   []ScaleOptions
+	Title         string
+	Headline      string
+	Key           string
+	Pitch         string
+	ScaleImgPath  string
+	AudioPath     string
+	AudioPath2    string
+	PitchOptions  []ScaleOptions
+	KeyOptions    []ScaleOptions
 	OctaveOptions []ScaleOptions
 }
 
@@ -80,21 +80,21 @@ func Scale(w http.ResponseWriter, req *http.Request) {
 		ScaleOptions{"Key", "G#/Ab", false, "G#/Ab"},
 	}
 
-  // populate the default OctaveOptions for scales
-  oOptions := []ScaleOptions{
-		ScaleOptions{"Octave", "1", true, "1"},
-		ScaleOptions{"Octave", "2", false, "2"},
+	// populate the default OctaveOptions for scales
+	oOptions := []ScaleOptions{
+		ScaleOptions{"Octave", "1", true, "1 Octave"},
+		ScaleOptions{"Octave", "2", false, "2 Octave"},
 	}
 
 	// set page variables
 	pageVars := PageVars{
-		Title:        "Scale of A Major", // default scale initially displayed is A Major
-		ScaleImgPath: "img/major/a1.png",
-		AudioPath:    "wav/major/a1.wav",
-		Pitch:        "Major",
-		Key:          "A",
-		PitchOptions: pOptions,
-		KeyOptions:   kOptions,
+		Title:         "Scale of A Major", // default scale initially displayed is A Major
+		ScaleImgPath:  "img/major/a1.png",
+		AudioPath:     "wav/major/a1.wav",
+		Pitch:         "Major",
+		Key:           "A",
+		PitchOptions:  pOptions,
+		KeyOptions:    kOptions,
 		OctaveOptions: oOptions,
 	}
 	render(w, "scale.html", pageVars)
@@ -139,10 +139,10 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 		ScaleOptions{"Key", "G#/Ab", false, "G#/Ab"},
 	}
 
-  // populate the default OctaveOptions for scales
+	// populate the default OctaveOptions for scales
 	oOptions := []ScaleOptions{
-		ScaleOptions{"Octave", "1", true, "1"},
-		ScaleOptions{"Octave", "2", false, "2"},
+		ScaleOptions{"Octave", "1", true, "1 Octave"},
+		ScaleOptions{"Octave", "2", false, "2 Octave"},
 	}
 
 	r.ParseForm() //r is url.Values which is a map[string][]string
@@ -158,40 +158,21 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 	pitch := ""
 	octave := ""
 
-	// identify selected key / pitch / octave and generate a string with the name of the scale from the form.
-
-for i:= 0; i < 3; i++{
-	switch svalues[i] {
-	case "Major":
-		pitch = svalues[i]
-  case "Minor":
-		pitch = svalues[i]
-  case "1":
-		octave = svalues[i]
-	case "2":
-		octave = svalues[i]
-  default:
-		key = svalues[i]
+	// identify selected key / pitch / octave and stick them in variables for later use.
+	for i := 0; i < 3; i++ {
+		switch svalues[i] {
+		case "Major":
+			pitch = svalues[i]
+		case "Minor":
+			pitch = svalues[i]
+		case "1":
+			octave = svalues[i]
+		case "2":
+			octave = svalues[i]
+		default:
+			key = svalues[i]
+		}
 	}
-}
-
-fmt.Println(octave)
-//	if svalues[0] == "Major" || svalues[0] == "Minor" {
-//		pitch = svalues[0]
-//		if svalues[1] == "1" || svalues[1] == "2"  {
-//			octave = svalues[1]
-//			key = svalues[2]
-//		}
-//	}
-
-//	if svalues[1] == "Major" || svalues[1] == "Minor" {
-//		pitch = svalues[1]
-//		if svalues[0] == "1" || svalues[0] == "2"  {
-//			octave = svalues[0]
-//			key = svalues[2]
-//		}
-//	}
-
 
 	// set the selected key's IsChecked value to true so can persist radio button selection
 	switch key {
@@ -382,12 +363,12 @@ fmt.Println(octave)
 	path := "img/"
 	if pitch == "Major" {
 		path += "major/"
-
 		pOptions = []ScaleOptions{
 			ScaleOptions{"Pitch", "Major", true, "Major"},
 			ScaleOptions{"Pitch", "Minor", false, "Minor"},
 		}
 
+		// for major scales if the key is longer than 2 characters, we only care about the last 2 characters
 		if len(key) > 2 {
 			key = key[3:]
 		}
@@ -416,28 +397,59 @@ fmt.Println(octave)
 		path = path[:len(path)-1] // remove the #
 		path += "s"               // replace it with s
 	}
-	audioPath := path                                       //audioPath is a new copy of the img path
-	audioPath2 := ""                                        //declare audiopath2 as a blank string, used for melodic minor scales
-	audioPath = strings.Replace(audioPath, "img", "wav", 1) // but replace "img" with "wav"
-	path += "1.png"
 
-	if pitch == "Major" {
-		audioPath += "1.wav"
+	// persist the selected octave options
+	if octave == "1" {
+		oOptions = []ScaleOptions{
+			ScaleOptions{"Octave", "1", true, "1 Octave"},
+			ScaleOptions{"Octave", "2", false, "2 Octave"},
+		}
 	} else {
+		oOptions = []ScaleOptions{
+			ScaleOptions{"Octave", "1", false, "1 Octave"},
+			ScaleOptions{"Octave", "2", true, "2 Octave"},
+		}
+	}
+
+	//audioPath is a new copy of the img path
+	audioPath := path
+	// replace the "img" in the path with "wav"
+	audioPath = strings.Replace(audioPath, "img", "wav", 1)
+	//audiopath2 as a blank string, this path is used for melodic minor scales
+	audioPath2 := ""
+
+if pitch == "Major"{
+
+	switch octave {
+	case "1":
+		path += "1.png"
+
+	case "2":
+		path += "2.png"
+
+	}
+} else {
+	path += "1.png"
+}
+
+	if pitch == "Major" && octave == "1" {
+		audioPath += "1.wav"
+	}
+	if pitch == "Minor" && octave == "1" {
 		audioPath2 = audioPath
 		audioPath += "1h.wav"
 		audioPath2 += "1m.wav"
 	}
 
 	pageVars := PageVars{
-		Title:        sstring,
-		Key:          key,
-		Pitch:        pitch,
-		ScaleImgPath: path,
-		AudioPath:    audioPath,
-		AudioPath2:   audioPath2,
-		PitchOptions: pOptions,
-		KeyOptions:   kOptions,
+		Title:         sstring,
+		Key:           key,
+		Pitch:         pitch,
+		ScaleImgPath:  path,
+		AudioPath:     audioPath,
+		AudioPath2:    audioPath2,
+		PitchOptions:  pOptions,
+		KeyOptions:    kOptions,
 		OctaveOptions: oOptions,
 	}
 	render(w, "scale.html", pageVars)
