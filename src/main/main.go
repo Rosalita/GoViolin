@@ -416,16 +416,31 @@ if pitch == "Major"{
 
 	}
 } else {
-	path += "1.png"
+	switch octave {
+	case "1":
+		path += "1.png"
+
+	case "2":
+		path += "2.png"
+
+	}
 }
 
 	if pitch == "Major" && octave == "1" {
 		audioPath += "1.mp3"
 	}
+	if pitch == "Major" && octave == "2" {
+		audioPath += "2.mp3"
+	}
 	if pitch == "Minor" && octave == "1" {
 		audioPath2 = audioPath
 		audioPath += "1h.mp3"
 		audioPath2 += "1m.mp3"
+	}
+	if pitch == "Minor" && octave == "2" {
+		audioPath2 = audioPath
+		audioPath += "2h.mp3"
+		audioPath2 += "2m.mp3"
 	}
 
 	pageVars := PageVars{
