@@ -34,10 +34,10 @@ func main() {
 	// fs := http.FileServer(http.Dir(""))
 	// http.Handle("/", fs)
 
-	// serve everything in the css folder, the img folder and wav folder as a file
+	// serve everything in the css folder, the img folder and mp3 folder as a file
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
 	http.Handle("/img/", http.StripPrefix("/img/", http.FileServer(http.Dir("img"))))
-	http.Handle("/wav/", http.StripPrefix("/wav/", http.FileServer(http.Dir("wav"))))
+	http.Handle("/mp3/", http.StripPrefix("/mp3/", http.FileServer(http.Dir("mp3"))))
 
 	// when navigating to /home it should serve the home page
 	http.HandleFunc("/", Home)
@@ -91,7 +91,7 @@ func Scale(w http.ResponseWriter, req *http.Request) {
 	pageVars := PageVars{
 		Title:         "Scale of A Major", // default scale initially displayed is A Major
 		ScaleImgPath:  "img/major/a1.png",
-		AudioPath:     "wav/major/a1.wav",
+		AudioPath:     "mp3/major/a1.mp3",
 		Pitch:         "Major",
 		Key:           "A",
 		PitchOptions:  pOptions,
@@ -400,8 +400,8 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 
 	//audioPath is a new copy of the img path
 	audioPath := path
-	// replace the "img" in the path with "wav"
-	audioPath = strings.Replace(audioPath, "img", "wav", 1)
+	// replace the "img" in the path with "mp3"
+	audioPath = strings.Replace(audioPath, "img", "mp3", 1)
 	//audiopath2 as a blank string, this path is used for melodic minor scales
 	audioPath2 := ""
 
@@ -420,12 +420,12 @@ if pitch == "Major"{
 }
 
 	if pitch == "Major" && octave == "1" {
-		audioPath += "1.wav"
+		audioPath += "1.mp3"
 	}
 	if pitch == "Minor" && octave == "1" {
 		audioPath2 = audioPath
-		audioPath += "1h.wav"
-		audioPath2 += "1m.wav"
+		audioPath += "1h.mp3"
+		audioPath2 += "1m.mp3"
 	}
 
 	pageVars := PageVars{
@@ -476,7 +476,7 @@ func Arp(w http.ResponseWriter, req *http.Request) {
 	pageVars := PageVars{
 		Title:         "Arpeggio of A Major", // default arpeggio initially displayed is A Major
 		ScaleImgPath:  "img/major/a1.png",
-		AudioPath:     "wav/major/a1.wav",
+		AudioPath:     "mp3/major/a1.mp3",
 		Pitch:         "Major",
 		Key:           "A",
 		PitchOptions:  pOptions,
@@ -784,8 +784,8 @@ func ArpShow(w http.ResponseWriter, r *http.Request) {
 
 	//audioPath is a new copy of the img path
 	audioPath := path
-	// replace the "img" in the path with "wav"
-	audioPath = strings.Replace(audioPath, "img", "wav", 1)
+	// replace the "img" in the path with "mp3"
+	audioPath = strings.Replace(audioPath, "img", "mp3", 1)
 	//audiopath2 as a blank string, this path is used for melodic minor scales
 	audioPath2 := ""
 
@@ -804,12 +804,12 @@ if pitch == "Major"{
 }
 
 	if pitch == "Major" && octave == "1" {
-		audioPath += "1.wav"
+		audioPath += "1.mp3"
 	}
 	if pitch == "Minor" && octave == "1" {
 		audioPath2 = audioPath
-		audioPath += "1h.wav"
-		audioPath2 += "1m.wav"
+		audioPath += "1h.mp3"
+		audioPath2 += "1m.mp3"
 	}
 
 	pageVars := PageVars{
