@@ -155,12 +155,13 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	sstring := "Scale of "
+	scalearp:=""
 	key := ""
 	pitch := ""
 	octave := ""
 
 	// identify selected key / pitch / octave and stick them in variables for later use.
-	for i := 0; i < 3; i++ {
+	for i := 0; i < 4; i++ {
 		switch svalues[i] {
 		case "Major":
 			pitch = svalues[i]
@@ -170,6 +171,10 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 			octave = svalues[i]
 		case "2":
 			octave = svalues[i]
+		case "Scale":
+			scalearp = svalues[i]
+	  case "Arpeggio":
+			scalearp = svalues[i]
 		default:
 			key = svalues[i]
 		}
@@ -409,6 +414,18 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 		oOptions = []ScaleOptions{
 			ScaleOptions{"Octave", "1", false, "1 Octave"},
 			ScaleOptions{"Octave", "2", true, "2 Octave"},
+		}
+	}
+
+	if scalearp == "Scale"{
+		sOptions = []ScaleOptions{
+			ScaleOptions{"Scalearp", "Scale", true, "Scales"},
+			ScaleOptions{"Scalearp", "Arpeggio", false, "Arpeggios"},
+		}
+	} else {
+		sOptions = []ScaleOptions{
+			ScaleOptions{"Scalearp", "Scale", false, "Scales"},
+			ScaleOptions{"Scalearp", "Arpeggio", true, "Arpeggios"},
 		}
 	}
 
