@@ -73,7 +73,7 @@ nav li a:hover {
   padding-top: 75px;
 }
 
-.pitchselect{
+.optionselect{
   padding-top: 25px;
   color: #A49A87;
   margin-left: 50px;
@@ -112,6 +112,16 @@ margin-right:145px;
 }
 .submit{
     margin-top: 10px;
+}
+
+.scalearpselect{
+  margin-top: 10px;
+  color: #A49A87;
+}
+
+.pitchselect{
+  margin-top: 10px;
+  color: #A49A87;
 }
 
 .keyselect{

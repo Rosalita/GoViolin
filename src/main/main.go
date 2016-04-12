@@ -16,6 +16,7 @@ type PageVars struct {
 	ScaleImgPath  string
 	AudioPath     string
 	AudioPath2    string
+	ScaleOptions  []ScaleOptions
 	PitchOptions  []ScaleOptions
 	KeyOptions    []ScaleOptions
 	OctaveOptions []ScaleOptions
@@ -58,13 +59,20 @@ func Home(w http.ResponseWriter, req *http.Request) {
 }
 
 func Scale(w http.ResponseWriter, req *http.Request) {
-	//populate the default PitchOptions for scales
+
+	//populate the default ScaleOptions for scales and arpeggios
+	sOptions := []ScaleOptions{
+		ScaleOptions{"Scalearp", "Scale", true, "Scales"},
+		ScaleOptions{"Scalearp", "Arpeggio", false, "Arpeggios"},
+	}
+
+	//populate the default PitchOptions for scales and arpeggios
 	pOptions := []ScaleOptions{
 		ScaleOptions{"Pitch", "Major", true, "Major"},
 		ScaleOptions{"Pitch", "Minor", false, "Minor"},
 	}
 
-	// populate the default KeyOptions for scales
+	// populate the default KeyOptions for scales and arpeggios
 	kOptions := []ScaleOptions{
 		ScaleOptions{"Key", "A", true, "A"},
 		ScaleOptions{"Key", "Bb", false, "Bb"},
@@ -80,7 +88,7 @@ func Scale(w http.ResponseWriter, req *http.Request) {
 		ScaleOptions{"Key", "G#/Ab", false, "G#/Ab"},
 	}
 
-	// populate the default OctaveOptions for scales
+	// populate the default OctaveOptions for scales and arpeggios
 	oOptions := []ScaleOptions{
 		ScaleOptions{"Octave", "1", true, "1 Octave"},
 		ScaleOptions{"Octave", "2", false, "2 Octave"},
@@ -93,6 +101,7 @@ func Scale(w http.ResponseWriter, req *http.Request) {
 		AudioPath:     "mp3/major/a1.mp3",
 		Pitch:         "Major",
 		Key:           "A",
+		ScaleOptions:  sOptions,
 		PitchOptions:  pOptions,
 		KeyOptions:    kOptions,
 		OctaveOptions: oOptions,
@@ -103,7 +112,13 @@ func Scale(w http.ResponseWriter, req *http.Request) {
 // handler for /scaleshow which parses the values submitted from /scale
 func ScaleShow(w http.ResponseWriter, r *http.Request) {
 
-	//populate the default PitchOptions for scales
+	//populate the default ScaleOptions for scales and arpeggios
+	sOptions := []ScaleOptions{
+		ScaleOptions{"Scalearp", "Scale", true, "Scales"},
+		ScaleOptions{"Scalearp", "Arpeggio", false, "Arpeggios"},
+	}
+
+	//populate the default ScaleArp options for scales or arpeggios
 	pOptions := []ScaleOptions{
 		ScaleOptions{"Pitch", "Major", true, "Major"},
 		ScaleOptions{"Pitch", "Minor", false, "Minor"},
@@ -449,6 +464,7 @@ if pitch == "Major"{
 		ScaleImgPath:  path,
 		AudioPath:     audioPath,
 		AudioPath2:    audioPath2,
+		ScaleOptions:  sOptions,
 		PitchOptions:  pOptions,
 		KeyOptions:    kOptions,
 		OctaveOptions: oOptions,
