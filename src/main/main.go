@@ -25,6 +25,7 @@ type PageVars struct {
 type ScaleOptions struct {
 	Name      string
 	Value     string
+	IsDisabled bool
 	IsChecked bool
 	Text      string
 }
@@ -130,14 +131,14 @@ kOptions = setKeyOptions(key)
 	if scalearp == "Scale" {
 		// if scale is selected set scale isChecked to true and arpeggio isChecked to false
 		sOptions = []ScaleOptions{
-			ScaleOptions{"Scalearp", "Scale", true, "Scales"},
-			ScaleOptions{"Scalearp", "Arpeggio", false, "Arpeggios"},
+			ScaleOptions{"Scalearp", "Scale", false, true, "Scales"},
+			ScaleOptions{"Scalearp", "Arpeggio", false, false, "Arpeggios"},
 		}
 	} else {
 		// if arpeggio is selected set arpeggio isChecked to true and scale isChecked to false
 		sOptions = []ScaleOptions{
-			ScaleOptions{"Scalearp", "Scale", false, "Scales"},
-			ScaleOptions{"Scalearp", "Arpeggio", true, "Arpeggios"},
+			ScaleOptions{"Scalearp", "Scale", false, false, "Scales"},
+			ScaleOptions{"Scalearp", "Arpeggio", false, true, "Arpeggios"},
 		}
 
 		// if arpeggio is selected, add "arps/" to the img and mp3 paths
@@ -149,8 +150,8 @@ kOptions = setKeyOptions(key)
 		imgPath += "major/"           // add "major/" to the image path to find the image
 		audioPath +="major/"          // add "major/" to the audio path to find the mp3
 		pOptions = []ScaleOptions{ // if major was selected, set major isChecked to true and minor isChecked to false
-			ScaleOptions{"Pitch", "Major", true, "Major"},
-			ScaleOptions{"Pitch", "Minor", false, "Minor"},
+			ScaleOptions{"Pitch", "Major", false, true, "Major"},
+			ScaleOptions{"Pitch", "Minor", false, false, "Minor"},
 		}
 		// for major scales if the key is longer than 2 characters, we only care about the last 2 characters
 		if len(key) > 2 {
@@ -174,8 +175,8 @@ kOptions = setKeyOptions(key)
 		imgPath += "minor/"        // add "minor/" to the image path to find the image
 		audioPath +="minor/"       // add "minor/" to the audio path to find the mp3
 		pOptions = []ScaleOptions{ // if minor was selected, set minor isChecked to true and major isChecked to false
-			ScaleOptions{"Pitch", "Major", false, "Major"},
-			ScaleOptions{"Pitch", "Minor", true, "Minor"},
+			ScaleOptions{"Pitch", "Major", false, false, "Major"},
+			ScaleOptions{"Pitch", "Minor", false, true, "Minor"},
 		}
 		// for minor scales if the key is longer than 2 characters, we only care about the first 2 characters
 		if len(key) > 2 {
@@ -207,16 +208,55 @@ kOptions = setKeyOptions(key)
 	// persist the selected octave options
 	if octave == "1" {
 		oOptions = []ScaleOptions{
-			ScaleOptions{"Octave", "1", true, "1 Octave"},
-			ScaleOptions{"Octave", "2", false, "2 Octave"},
+			ScaleOptions{"Octave", "1", false, true, "1 Octave"},
+			ScaleOptions{"Octave", "2", false, false, "2 Octave"},
 		}
 	} else {
 		oOptions = []ScaleOptions{
-			ScaleOptions{"Octave", "1", false, "1 Octave"},
-			ScaleOptions{"Octave", "2", true, "2 Octave"},
+			ScaleOptions{"Octave", "1", false, false, "1 Octave"},
+			ScaleOptions{"Octave", "2", false, true, "2 Octave"},
 		}
 	}
 
+// force some options and disable some choices if the user has selected arpeggios
+if scalearp == "Arpeggio" {
+
+	oOptions = []ScaleOptions{
+		ScaleOptions{"Octave", "1", true, false, "1 Octave"},
+		ScaleOptions{"Octave", "2", false, true, "2 Octave"},
+	}
+
+  pOptions = []ScaleOptions{ // if minor was selected, set minor isChecked to true and major isChecked to false
+	    	ScaleOptions{"Pitch", "Major", false, true, "Major"},
+		    ScaleOptions{"Pitch", "Minor", true, false, "Minor"},
+
+	}
+
+  // if any of the existing paths contain a 1, replace with 2
+  if strings.Contains(imgPath, "1"){
+		imgPath = imgPath[:len(imgPath)-5]
+		imgPath += "2.png"
+	}
+  if strings.Contains(audioPath, "1"){
+		audioPath = audioPath[:len(audioPath)-5]
+		audioPath += "2.mp3"
+  }
+	if strings.Contains(imgPath, "minor"){
+		start:= imgPath[:len(imgPath)-12]
+		end:= imgPath[14:]
+		imgPath = start
+		imgPath += "major"
+		imgPath += end
+	}
+	if strings.Contains(audioPath, "minor"){
+		start:= audioPath[:len(audioPath)-12]
+		end:= audioPath[14:]
+		audioPath = start
+		audioPath += "major"
+		audioPath += end
+	}
+
+}
 
 
 	pageVars := PageVars{
@@ -268,36 +308,36 @@ func setDefaultScaleOptions() ([]ScaleOptions, []ScaleOptions, []ScaleOptions, [
 
 	//set the default scaleOptions for scales and arpeggios
 	sOptions := []ScaleOptions{
-		ScaleOptions{"Scalearp", "Scale", true, "Scales"},
-		ScaleOptions{"Scalearp", "Arpeggio", false, "Arpeggios"},
+		ScaleOptions{"Scalearp", "Scale", false, true, "Scales"},
+		ScaleOptions{"Scalearp", "Arpeggio", false, false, "Arpeggios"},
 	}
 
 	//set the default PitchOptions for scales and arpeggios
 	pOptions := []ScaleOptions{
-		ScaleOptions{"Pitch", "Major", true, "Major"},
-		ScaleOptions{"Pitch", "Minor", false, "Minor"},
+		ScaleOptions{"Pitch", "Major", false, true, "Major"},
+		ScaleOptions{"Pitch", "Minor", false, false, "Minor"},
 	}
 
 	// set the default KeyOptions for scales and arpeggios
 	kOptions := []ScaleOptions{
-		ScaleOptions{"Key", "A", true, "A"},
-		ScaleOptions{"Key", "Bb", false, "Bb"},
-		ScaleOptions{"Key", "B", false, "B"},
-		ScaleOptions{"Key", "C", false, "C"},
-		ScaleOptions{"Key", "C#/Db", false, "C#/Db"},
-		ScaleOptions{"Key", "D", false, "D"},
-		ScaleOptions{"Key", "Eb", false, "Eb"},
-		ScaleOptions{"Key", "E", false, "E"},
-		ScaleOptions{"Key", "F", false, "F"},
-		ScaleOptions{"Key", "F#/Gb", false, "F#/Gb"},
-		ScaleOptions{"Key", "G", false, "G"},
-		ScaleOptions{"Key", "G#/Ab", false, "G#/Ab"},
+		ScaleOptions{"Key", "A", false, true, "A"},
+		ScaleOptions{"Key", "Bb", false, false, "Bb"},
+		ScaleOptions{"Key", "B", false, false, "B"},
+		ScaleOptions{"Key", "C", false, false, "C"},
+		ScaleOptions{"Key", "C#/Db", false, false, "C#/Db"},
+		ScaleOptions{"Key", "D", false, false, "D"},
+		ScaleOptions{"Key", "Eb", false, false, "Eb"},
+		ScaleOptions{"Key", "E", false, false, "E"},
+		ScaleOptions{"Key", "F", false, false, "F"},
+		ScaleOptions{"Key", "F#/Gb", false, false, "F#/Gb"},
+		ScaleOptions{"Key", "G", false, false,  "G"},
+		ScaleOptions{"Key", "G#/Ab", false, false, "G#/Ab"},
 	}
 
 	// set the default OctaveOptions for scales and arpeggios
 	oOptions := []ScaleOptions{
-		ScaleOptions{"Octave", "1", true, "1 Octave"},
-		ScaleOptions{"Octave", "2", false, "2 Octave"},
+		ScaleOptions{"Octave", "1", false, true, "1 Octave"},
+		ScaleOptions{"Octave", "2", false, false, "2 Octave"},
 	}
 	return sOptions, pOptions, kOptions, oOptions
 }
@@ -306,184 +346,184 @@ func setKeyOptions(key string)(kOptions []ScaleOptions){
 	switch key {
 	case "A":
 		kOptions = []ScaleOptions{
-			ScaleOptions{"Key", "A", true, "A"},
-			ScaleOptions{"Key", "Bb", false, "Bb"},
-			ScaleOptions{"Key", "B", false, "B"},
-			ScaleOptions{"Key", "C", false, "C"},
-			ScaleOptions{"Key", "C#/Db", false, "C#/Db"},
-			ScaleOptions{"Key", "D", false, "D"},
-			ScaleOptions{"Key", "Eb", false, "Eb"},
-			ScaleOptions{"Key", "E", false, "E"},
-			ScaleOptions{"Key", "F", false, "F"},
-			ScaleOptions{"Key", "F#/Gb", false, "F#/Gb"},
-			ScaleOptions{"Key", "G", false, "G"},
-			ScaleOptions{"Key", "G#/Ab", false, "G#/Ab"},
+			ScaleOptions{"Key", "A", false, true, "A"},
+			ScaleOptions{"Key", "Bb", false, false, "Bb"},
+			ScaleOptions{"Key", "B", false, false, "B"},
+			ScaleOptions{"Key", "C", false, false, "C"},
+			ScaleOptions{"Key", "C#/Db", false, false, "C#/Db"},
+			ScaleOptions{"Key", "D", false, false, "D"},
+			ScaleOptions{"Key", "Eb", false, false, "Eb"},
+			ScaleOptions{"Key", "E", false, false, "E"},
+			ScaleOptions{"Key", "F", false, false, "F"},
+			ScaleOptions{"Key", "F#/Gb", false, false, "F#/Gb"},
+			ScaleOptions{"Key", "G", false, false, "G"},
+			ScaleOptions{"Key", "G#/Ab", false, false, "G#/Ab"},
 		}
 	case "Bb":
 		kOptions = []ScaleOptions{
-			ScaleOptions{"Key", "A", false, "A"},
-			ScaleOptions{"Key", "Bb", true, "Bb"},
-			ScaleOptions{"Key", "B", false, "B"},
-			ScaleOptions{"Key", "C", false, "C"},
-			ScaleOptions{"Key", "C#/Db", false, "C#/Db"},
-			ScaleOptions{"Key", "D", false, "D"},
-			ScaleOptions{"Key", "Eb", false, "Eb"},
-			ScaleOptions{"Key", "E", false, "E"},
-			ScaleOptions{"Key", "F", false, "F"},
-			ScaleOptions{"Key", "F#/Gb", false, "F#/Gb"},
-			ScaleOptions{"Key", "G", false, "G"},
-			ScaleOptions{"Key", "G#/Ab", false, "G#/Ab"},
+			ScaleOptions{"Key", "A", false, false, "A"},
+			ScaleOptions{"Key", "Bb", false, true, "Bb"},
+			ScaleOptions{"Key", "B", false, false, "B"},
+			ScaleOptions{"Key", "C", false, false, "C"},
+			ScaleOptions{"Key", "C#/Db", false, false, "C#/Db"},
+			ScaleOptions{"Key", "D", false, false, "D"},
+			ScaleOptions{"Key", "Eb", false, false, "Eb"},
+			ScaleOptions{"Key", "E", false, false, "E"},
+			ScaleOptions{"Key", "F", false, false, "F"},
+			ScaleOptions{"Key", "F#/Gb", false, false, "F#/Gb"},
+			ScaleOptions{"Key", "G", false, false, "G"},
+			ScaleOptions{"Key", "G#/Ab", false, false, "G#/Ab"},
 		}
 	case "B":
 		kOptions = []ScaleOptions{
-			ScaleOptions{"Key", "A", false, "A"},
-			ScaleOptions{"Key", "Bb", false, "Bb"},
-			ScaleOptions{"Key", "B", true, "B"},
-			ScaleOptions{"Key", "C", false, "C"},
-			ScaleOptions{"Key", "C#/Db", false, "C#/Db"},
-			ScaleOptions{"Key", "D", false, "D"},
-			ScaleOptions{"Key", "Eb", false, "Eb"},
-			ScaleOptions{"Key", "E", false, "E"},
-			ScaleOptions{"Key", "F", false, "F"},
-			ScaleOptions{"Key", "F#/Gb", false, "F#/Gb"},
-			ScaleOptions{"Key", "G", false, "G"},
-			ScaleOptions{"Key", "G#/Ab", false, "G#/Ab"},
+			ScaleOptions{"Key", "A", false, false, "A"},
+			ScaleOptions{"Key", "Bb", false, false, "Bb"},
+			ScaleOptions{"Key", "B", false, true, "B"},
+			ScaleOptions{"Key", "C", false, false, "C"},
+			ScaleOptions{"Key", "C#/Db", false, false, "C#/Db"},
+			ScaleOptions{"Key", "D", false, false, "D"},
+			ScaleOptions{"Key", "Eb", false, false, "Eb"},
+			ScaleOptions{"Key", "E", false, false, "E"},
+			ScaleOptions{"Key", "F", false, false, "F"},
+			ScaleOptions{"Key", "F#/Gb", false, false, "F#/Gb"},
+			ScaleOptions{"Key", "G", false, false, "G"},
+			ScaleOptions{"Key", "G#/Ab", false, false, "G#/Ab"},
 		}
 	case "C":
 		kOptions = []ScaleOptions{
-			ScaleOptions{"Key", "A", false, "A"},
-			ScaleOptions{"Key", "Bb", false, "Bb"},
-			ScaleOptions{"Key", "B", false, "B"},
-			ScaleOptions{"Key", "C", true, "C"},
-			ScaleOptions{"Key", "C#/Db", false, "C#/Db"},
-			ScaleOptions{"Key", "D", false, "D"},
-			ScaleOptions{"Key", "Eb", false, "Eb"},
-			ScaleOptions{"Key", "E", false, "E"},
-			ScaleOptions{"Key", "F", false, "F"},
-			ScaleOptions{"Key", "F#/Gb", false, "F#/Gb"},
-			ScaleOptions{"Key", "G", false, "G"},
-			ScaleOptions{"Key", "G#/Ab", false, "G#/Ab"},
+			ScaleOptions{"Key", "A", false, false, "A"},
+			ScaleOptions{"Key", "Bb", false, false, "Bb"},
+			ScaleOptions{"Key", "B", false, false, "B"},
+			ScaleOptions{"Key", "C", false, true, "C"},
+			ScaleOptions{"Key", "C#/Db", false, false, "C#/Db"},
+			ScaleOptions{"Key", "D", false, false, "D"},
+			ScaleOptions{"Key", "Eb", false, false, "Eb"},
+			ScaleOptions{"Key", "E", false, false, "E"},
+			ScaleOptions{"Key", "F", false, false, "F"},
+			ScaleOptions{"Key", "F#/Gb", false, false, "F#/Gb"},
+			ScaleOptions{"Key", "G", false, false, "G"},
+			ScaleOptions{"Key", "G#/Ab", false, false, "G#/Ab"},
 		}
 	case "C#/Db":
 		kOptions = []ScaleOptions{
-			ScaleOptions{"Key", "A", false, "A"},
-			ScaleOptions{"Key", "Bb", false, "Bb"},
-			ScaleOptions{"Key", "B", false, "B"},
-			ScaleOptions{"Key", "C", false, "C"},
-			ScaleOptions{"Key", "C#/Db", true, "C#/Db"},
-			ScaleOptions{"Key", "D", false, "D"},
-			ScaleOptions{"Key", "Eb", false, "Eb"},
-			ScaleOptions{"Key", "E", false, "E"},
-			ScaleOptions{"Key", "F", false, "F"},
-			ScaleOptions{"Key", "F#/Gb", false, "F#/Gb"},
-			ScaleOptions{"Key", "G", false, "G"},
-			ScaleOptions{"Key", "G#/Ab", false, "G#/Ab"},
+			ScaleOptions{"Key", "A", false, false, "A"},
+			ScaleOptions{"Key", "Bb", false, false, "Bb"},
+			ScaleOptions{"Key", "B", false, false, "B"},
+			ScaleOptions{"Key", "C", false, false, "C"},
+			ScaleOptions{"Key", "C#/Db", false, true, "C#/Db"},
+			ScaleOptions{"Key", "D", false, false, "D"},
+			ScaleOptions{"Key", "Eb", false, false, "Eb"},
+			ScaleOptions{"Key", "E", false, false, "E"},
+			ScaleOptions{"Key", "F", false, false, "F"},
+			ScaleOptions{"Key", "F#/Gb", false, false, "F#/Gb"},
+			ScaleOptions{"Key", "G", false, false, "G"},
+			ScaleOptions{"Key", "G#/Ab", false, false, "G#/Ab"},
 		}
 	case "D":
 		kOptions = []ScaleOptions{
-			ScaleOptions{"Key", "A", false, "A"},
-			ScaleOptions{"Key", "Bb", false, "Bb"},
-			ScaleOptions{"Key", "B", false, "B"},
-			ScaleOptions{"Key", "C", false, "C"},
-			ScaleOptions{"Key", "C#/Db", false, "C#/Db"},
-			ScaleOptions{"Key", "D", true, "D"},
-			ScaleOptions{"Key", "Eb", false, "Eb"},
-			ScaleOptions{"Key", "E", false, "E"},
-			ScaleOptions{"Key", "F", false, "F"},
-			ScaleOptions{"Key", "F#/Gb", false, "F#/Gb"},
-			ScaleOptions{"Key", "G", false, "G"},
-			ScaleOptions{"Key", "G#/Ab", false, "G#/Ab"},
+			ScaleOptions{"Key", "A", false, false, "A"},
+			ScaleOptions{"Key", "Bb", false, false, "Bb"},
+			ScaleOptions{"Key", "B", false, false, "B"},
+			ScaleOptions{"Key", "C", false, false, "C"},
+			ScaleOptions{"Key", "C#/Db", false, false, "C#/Db"},
+			ScaleOptions{"Key", "D", false, true, "D"},
+			ScaleOptions{"Key", "Eb", false, false, "Eb"},
+			ScaleOptions{"Key", "E", false, false, "E"},
+			ScaleOptions{"Key", "F", false, false, "F"},
+			ScaleOptions{"Key", "F#/Gb", false, false, "F#/Gb"},
+			ScaleOptions{"Key", "G", false, false, "G"},
+			ScaleOptions{"Key", "G#/Ab", false, false, "G#/Ab"},
 		}
 	case "Eb":
 		kOptions = []ScaleOptions{
-			ScaleOptions{"Key", "A", false, "A"},
-			ScaleOptions{"Key", "Bb", false, "Bb"},
-			ScaleOptions{"Key", "B", false, "B"},
-			ScaleOptions{"Key", "C", false, "C"},
-			ScaleOptions{"Key", "C#/Db", false, "C#/Db"},
-			ScaleOptions{"Key", "D", false, "D"},
-			ScaleOptions{"Key", "Eb", true, "Eb"},
-			ScaleOptions{"Key", "E", false, "E"},
-			ScaleOptions{"Key", "F", false, "F"},
-			ScaleOptions{"Key", "F#/Gb", false, "F#/Gb"},
-			ScaleOptions{"Key", "G", false, "G"},
-			ScaleOptions{"Key", "G#/Ab", false, "G#/Ab"},
+			ScaleOptions{"Key", "A", false, false, "A"},
+			ScaleOptions{"Key", "Bb", false, false, "Bb"},
+			ScaleOptions{"Key", "B", false, false, "B"},
+			ScaleOptions{"Key", "C", false, false, "C"},
+			ScaleOptions{"Key", "C#/Db", false, false, "C#/Db"},
+			ScaleOptions{"Key", "D", false, false, "D"},
+			ScaleOptions{"Key", "Eb", false, true, "Eb"},
+			ScaleOptions{"Key", "E", false, false, "E"},
+			ScaleOptions{"Key", "F", false, false, "F"},
+			ScaleOptions{"Key", "F#/Gb", false, false, "F#/Gb"},
+			ScaleOptions{"Key", "G", false, false, "G"},
+			ScaleOptions{"Key", "G#/Ab", false, false, "G#/Ab"},
 		}
 	case "E":
 		kOptions = []ScaleOptions{
-			ScaleOptions{"Key", "A", false, "A"},
-			ScaleOptions{"Key", "Bb", false, "Bb"},
-			ScaleOptions{"Key", "B", false, "B"},
-			ScaleOptions{"Key", "C", false, "C"},
-			ScaleOptions{"Key", "C#/Db", false, "C#/Db"},
-			ScaleOptions{"Key", "D", false, "D"},
-			ScaleOptions{"Key", "Eb", false, "Eb"},
-			ScaleOptions{"Key", "E", true, "E"},
-			ScaleOptions{"Key", "F", false, "F"},
-			ScaleOptions{"Key", "F#/Gb", false, "F#/Gb"},
-			ScaleOptions{"Key", "G", false, "G"},
-			ScaleOptions{"Key", "G#/Ab", false, "G#/Ab"},
+			ScaleOptions{"Key", "A", false, false, "A"},
+			ScaleOptions{"Key", "Bb", false, false, "Bb"},
+			ScaleOptions{"Key", "B", false, false, "B"},
+			ScaleOptions{"Key", "C", false, false, "C"},
+			ScaleOptions{"Key", "C#/Db", false, false, "C#/Db"},
+			ScaleOptions{"Key", "D", false, false, "D"},
+			ScaleOptions{"Key", "Eb", false, false, "Eb"},
+			ScaleOptions{"Key", "E", false, true, "E"},
+			ScaleOptions{"Key", "F", false, false, "F"},
+			ScaleOptions{"Key", "F#/Gb", false, false, "F#/Gb"},
+			ScaleOptions{"Key", "G", false, false, "G"},
+			ScaleOptions{"Key", "G#/Ab", false, false, "G#/Ab"},
 		}
 	case "F":
 		kOptions = []ScaleOptions{
-			ScaleOptions{"Key", "A", false, "A"},
-			ScaleOptions{"Key", "Bb", false, "Bb"},
-			ScaleOptions{"Key", "B", false, "B"},
-			ScaleOptions{"Key", "C", false, "C"},
-			ScaleOptions{"Key", "C#/Db", false, "C#/Db"},
-			ScaleOptions{"Key", "D", false, "D"},
-			ScaleOptions{"Key", "Eb", false, "Eb"},
-			ScaleOptions{"Key", "E", false, "E"},
-			ScaleOptions{"Key", "F", true, "F"},
-			ScaleOptions{"Key", "F#/Gb", false, "F#/Gb"},
-			ScaleOptions{"Key", "G", false, "G"},
-			ScaleOptions{"Key", "G#/Ab", false, "G#/Ab"},
+			ScaleOptions{"Key", "A", false, false, "A"},
+			ScaleOptions{"Key", "Bb", false, false, "Bb"},
+			ScaleOptions{"Key", "B", false, false, "B"},
+			ScaleOptions{"Key", "C", false, false, "C"},
+			ScaleOptions{"Key", "C#/Db", false, false, "C#/Db"},
+			ScaleOptions{"Key", "D", false, false, "D"},
+			ScaleOptions{"Key", "Eb", false, false, "Eb"},
+			ScaleOptions{"Key", "E", false, false, "E"},
+			ScaleOptions{"Key", "F", false, true, "F"},
+			ScaleOptions{"Key", "F#/Gb", false, false, "F#/Gb"},
+			ScaleOptions{"Key", "G", false, false, "G"},
+			ScaleOptions{"Key", "G#/Ab", false, false, "G#/Ab"},
 		}
 	case "F#/Gb":
 		kOptions = []ScaleOptions{
-			ScaleOptions{"Key", "A", false, "A"},
-			ScaleOptions{"Key", "Bb", false, "Bb"},
-			ScaleOptions{"Key", "B", false, "B"},
-			ScaleOptions{"Key", "C", false, "C"},
-			ScaleOptions{"Key", "C#/Db", false, "C#/Db"},
-			ScaleOptions{"Key", "D", false, "D"},
-			ScaleOptions{"Key", "Eb", false, "Eb"},
-			ScaleOptions{"Key", "E", false, "E"},
-			ScaleOptions{"Key", "F", false, "F"},
-			ScaleOptions{"Key", "F#/Gb", true, "F#/Gb"},
-			ScaleOptions{"Key", "G", false, "G"},
-			ScaleOptions{"Key", "G#/Ab", false, "G#/Ab"},
+			ScaleOptions{"Key", "A", false, false, "A"},
+			ScaleOptions{"Key", "Bb", false, false, "Bb"},
+			ScaleOptions{"Key", "B", false, false, "B"},
+			ScaleOptions{"Key", "C", false, false, "C"},
+			ScaleOptions{"Key", "C#/Db", false, false, "C#/Db"},
+			ScaleOptions{"Key", "Eb", false, false, "Eb"},
+			ScaleOptions{"Key", "D", false, false, "D"},
+			ScaleOptions{"Key", "E", false, false, "E"},
+			ScaleOptions{"Key", "F", false, false, "F"},
+			ScaleOptions{"Key", "F#/Gb", false, true, "F#/Gb"},
+			ScaleOptions{"Key", "G", false, false, "G"},
+			ScaleOptions{"Key", "G#/Ab", false, false, "G#/Ab"},
 		}
 	case "G":
 		kOptions = []ScaleOptions{
-			ScaleOptions{"Key", "A", false, "A"},
-			ScaleOptions{"Key", "Bb", false, "Bb"},
-			ScaleOptions{"Key", "B", false, "B"},
-			ScaleOptions{"Key", "C", false, "C"},
-			ScaleOptions{"Key", "C#/Db", false, "C#/Db"},
-			ScaleOptions{"Key", "D", false, "D"},
-			ScaleOptions{"Key", "Eb", false, "Eb"},
-			ScaleOptions{"Key", "E", false, "E"},
-			ScaleOptions{"Key", "F", false, "F"},
-			ScaleOptions{"Key", "F#/Gb", false, "F#/Gb"},
-			ScaleOptions{"Key", "G", true, "G"},
-			ScaleOptions{"Key", "G#/Ab", false, "G#/Ab"},
+			ScaleOptions{"Key", "A", false, false, "A"},
+			ScaleOptions{"Key", "Bb", false, false, "Bb"},
+			ScaleOptions{"Key", "B", false, false, "B"},
+			ScaleOptions{"Key", "C", false, false, "C"},
+			ScaleOptions{"Key", "C#/Db", false, false, "C#/Db"},
+			ScaleOptions{"Key", "D", false, false, "D"},
+			ScaleOptions{"Key", "Eb", false, false, "Eb"},
+			ScaleOptions{"Key", "E", false, false, "E"},
+			ScaleOptions{"Key", "F", false, false, "F"},
+			ScaleOptions{"Key", "F#/Gb", false, false, "F#/Gb"},
+			ScaleOptions{"Key", "G", false, true, "G"},
+			ScaleOptions{"Key", "G#/Ab", false, false, "G#/Ab"},
 		}
 
 	case "G#/Ab":
 		kOptions = []ScaleOptions{
-			ScaleOptions{"Key", "A", false, "A"},
-			ScaleOptions{"Key", "Bb", false, "Bb"},
-			ScaleOptions{"Key", "B", false, "B"},
-			ScaleOptions{"Key", "C", false, "C"},
-			ScaleOptions{"Key", "C#/Db", false, "C#/Db"},
-			ScaleOptions{"Key", "D", false, "D"},
-			ScaleOptions{"Key", "Eb", false, "Eb"},
-			ScaleOptions{"Key", "E", false, "E"},
-			ScaleOptions{"Key", "F", false, "F"},
-			ScaleOptions{"Key", "F#/Gb", false, "F#/Gb"},
-			ScaleOptions{"Key", "G", false, "G"},
-			ScaleOptions{"Key", "G#/Ab", true, "G#/Ab"},
+			ScaleOptions{"Key", "A", false, false, "A"},
+			ScaleOptions{"Key", "Bb", false, false, "Bb"},
+			ScaleOptions{"Key", "B", false, false, "B"},
+			ScaleOptions{"Key", "C", false, false, "C"},
+			ScaleOptions{"Key", "C#/Db", false, false, "C#/Db"},
+			ScaleOptions{"Key", "D", false, false, "D"},
+			ScaleOptions{"Key", "Eb", false, false, "Eb"},
+			ScaleOptions{"Key", "E", false, false, "E"},
+			ScaleOptions{"Key", "F", false, false, "F"},
+			ScaleOptions{"Key", "F#/Gb", false, false, "F#/Gb"},
+			ScaleOptions{"Key", "G", false, false, "G"},
+			ScaleOptions{"Key", "G#/Ab", false, true, "G#/Ab"},
 		}
 	}
 

@@ -28,22 +28,22 @@
 
       <div class="scalearpselect">
        {{range .ScaleOptions}}
-         <input type="radio" name={{.Name}} value={{.Value}} {{if .IsChecked}}checked{{end}}> {{.Text}}
+         <input type="radio" name={{.Name}} value={{.Value}} {{if .IsDisabled}} disabled=true {{end}} {{if .IsChecked}}checked{{end}}> {{.Text}}
        {{end}}<br>
       </div>
       <div class="pitchselect">
        {{range .PitchOptions}}
-         <input type="radio" name={{.Name}} value={{.Value}} {{if .IsChecked}}checked{{end}}> {{.Text}}
+         <input type="radio" name={{.Name}} value={{.Value}} {{if .IsDisabled}} disabled=true {{end}} {{if .IsChecked}}checked{{end}}> {{.Text}}
        {{end}}
       </div>
       <div class="keyselect">
         {{range .KeyOptions}}
-          <input type="radio" name={{.Name}} value={{.Value}} {{if .IsChecked}}checked{{end}}> {{.Text}}
+          <input type="radio" name={{.Name}} value={{.Value}} {{if .IsDisabled}} disabled=true {{end}} {{if .IsChecked}}checked{{end}}> {{.Text}}
         {{end}}
       </div>
       <div class="octaveselect">
         {{range .OctaveOptions}}
-          <input type="radio" name={{.Name}} value={{.Value}} {{if .IsChecked}}checked{{end}}> {{.Text}}
+          <input type="radio" name={{.Name}} value={{.Value}} {{if .IsDisabled}} disabled=true {{end}} {{if .IsChecked}}checked{{end}}> {{.Text}}
         {{end}}
       </div>
   </form>
