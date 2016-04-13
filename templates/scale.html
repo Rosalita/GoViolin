@@ -98,7 +98,7 @@
 {{end}}
 
 
-<!-- some jquery to make the scale selection form submit itself if the user changes the pitch or key radio buttons -->
+<!-- some jquery to make the selection form submit itself if the user changes the scale/arpeggio, pitch, key or octave radio buttons -->
 <script type='text/javascript'>
  $(document).ready(function() {
    $('input[name=Key]').change(function(){
@@ -112,6 +112,11 @@ $(document).ready(function() {
 });
 $(document).ready(function() {
   $('input[name=Octave]').change(function(){
+    $('form').submit();
+  });
+});
+$(document).ready(function() {
+  $('input[name=Scalearp]').change(function(){
     $('form').submit();
   });
 });

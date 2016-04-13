@@ -127,6 +127,24 @@ kOptions = setKeyOptions(key)
 	audioPath := "mp3/"
 	audioPath2 := "" // audio path2 is only used for minor scales as they have 2 mp3s
 
+	if scalearp == "Scale" {
+		// if scale is selected set scale isChecked to true and arpeggio isChecked to false
+		sOptions = []ScaleOptions{
+			ScaleOptions{"Scalearp", "Scale", true, "Scales"},
+			ScaleOptions{"Scalearp", "Arpeggio", false, "Arpeggios"},
+		}
+	} else {
+		// if arpeggio is selected set arpeggio isChecked to true and scale isChecked to false
+		sOptions = []ScaleOptions{
+			ScaleOptions{"Scalearp", "Scale", false, "Scales"},
+			ScaleOptions{"Scalearp", "Arpeggio", true, "Arpeggios"},
+		}
+
+		// if arpeggio is selected, add "arps/" to the img and mp3 paths
+		imgPath += "arps/"
+		audioPath += "arps/"
+	}
+
 	if pitch == "Major" {
 		imgPath += "major/"           // add "major/" to the image path to find the image
 		audioPath +="major/"          // add "major/" to the audio path to find the mp3
@@ -199,17 +217,7 @@ kOptions = setKeyOptions(key)
 		}
 	}
 
-	if scalearp == "Scale" {
-		sOptions = []ScaleOptions{
-			ScaleOptions{"Scalearp", "Scale", true, "Scales"},
-			ScaleOptions{"Scalearp", "Arpeggio", false, "Arpeggios"},
-		}
-	} else {
-		sOptions = []ScaleOptions{
-			ScaleOptions{"Scalearp", "Scale", false, "Scales"},
-			ScaleOptions{"Scalearp", "Arpeggio", true, "Arpeggios"},
-		}
-	}
+
 
 	pageVars := PageVars{
 		Title:         "Practice Scales and Arpeggios",
