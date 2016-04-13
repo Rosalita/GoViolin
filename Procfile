@@ -1,1 +1,0 @@
-web: rosie-app 
