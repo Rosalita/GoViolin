@@ -93,12 +93,12 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	scalearp := ""
-	key := ""
-	pitch := ""
-	octave := ""
 
-	// identify selected scale / arpeggio, pitch, key and octave and store values in variables for later use.
+	scalearp, key, pitch, octave := "", "", "", ""
+
+
+	// the slice of values return by the request can be arranged in any order
+	// so identify selected scale / arpeggio, pitch, key and octave and store values in variables for later use.
 	for i := 0; i < 4; i++ {
 		switch svalues[i] {
 		case "Major":
@@ -118,7 +118,183 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	// set the selected key's IsChecked value to true so can persist radio button selection
+// update the key options based on users selection to set isChecked true for selected key and false for all other keys
+kOptions = setKeyOptions(key)
+
+
+	//intialise paths to the associated images and mp3s
+	imgPath := "img/"
+	audioPath := "mp3/"
+	audioPath2 := "" // audio path2 is only used for minor scales as they have 2 mp3s
+
+	if pitch == "Major" {
+		imgPath += "major/"           // add "major/" to the image path to find the image
+		audioPath +="major/"          // add "major/" to the audio path to find the mp3
+		pOptions = []ScaleOptions{ // if major was selected, set major isChecked to true and minor isChecked to false
+			ScaleOptions{"Pitch", "Major", true, "Major"},
+			ScaleOptions{"Pitch", "Minor", false, "Minor"},
+		}
+		// for major scales if the key is longer than 2 characters, we only care about the last 2 characters
+		if len(key) > 2 {
+			key = key[3:]
+		}
+		imgPath += strings.ToLower(key) // keys must be added to the path as lower case
+		audioPath += strings.ToLower(key)
+		switch octave {
+		case "1":
+			imgPath += "1.png"
+			audioPath += "1.mp3"
+
+		case "2":
+			imgPath += "2.png"
+			audioPath += "2.mp3"
+		}
+
+	}
+
+	if pitch == "Minor" {
+		imgPath += "minor/"        // add "minor/" to the image path to find the image
+		audioPath +="minor/"       // add "minor/" to the audio path to find the mp3
+		pOptions = []ScaleOptions{ // if minor was selected, set minor isChecked to true and major isChecked to false
+			ScaleOptions{"Pitch", "Major", false, "Major"},
+			ScaleOptions{"Pitch", "Minor", true, "Minor"},
+		}
+		// for minor scales if the key is longer than 2 characters, we only care about the first 2 characters
+		if len(key) > 2 {
+			key = key[:2]
+		}
+		imgPath += strings.ToLower(key) // keys must be added to the path as lower case
+		audioPath += strings.ToLower(key)
+
+		// minor scales can contain # change this to an s in the path
+    imgPath = changeSharpToS(imgPath)
+		audioPath = changeSharpToS(audioPath)
+
+		switch octave {
+		case "1":
+			imgPath += "1.png"
+			audioPath2 = audioPath
+			audioPath += "1h.mp3"
+			audioPath2 += "1m.mp3"
+
+		case "2":
+			imgPath += "2.png"
+			audioPath2 = audioPath
+			audioPath += "2h.mp3"
+			audioPath2 += "2m.mp3"
+		}
+	}
+
+
+	// persist the selected octave options
+	if octave == "1" {
+		oOptions = []ScaleOptions{
+			ScaleOptions{"Octave", "1", true, "1 Octave"},
+			ScaleOptions{"Octave", "2", false, "2 Octave"},
+		}
+	} else {
+		oOptions = []ScaleOptions{
+			ScaleOptions{"Octave", "1", false, "1 Octave"},
+			ScaleOptions{"Octave", "2", true, "2 Octave"},
+		}
+	}
+
+	if scalearp == "Scale" {
+		sOptions = []ScaleOptions{
+			ScaleOptions{"Scalearp", "Scale", true, "Scales"},
+			ScaleOptions{"Scalearp", "Arpeggio", false, "Arpeggios"},
+		}
+	} else {
+		sOptions = []ScaleOptions{
+			ScaleOptions{"Scalearp", "Scale", false, "Scales"},
+			ScaleOptions{"Scalearp", "Arpeggio", true, "Arpeggios"},
+		}
+	}
+
+	pageVars := PageVars{
+		Title:         "Practice Scales and Arpeggios",
+		Key:           key,
+		Pitch:         pitch,
+		ScaleImgPath:  imgPath,
+		AudioPath:     audioPath,
+		AudioPath2:    audioPath2,
+		ScaleOptions:  sOptions,
+		PitchOptions:  pOptions,
+		KeyOptions:    kOptions,
+		OctaveOptions: oOptions,
+	}
+	render(w, "scale.html", pageVars)
+}
+
+func Diary(w http.ResponseWriter, r *http.Request) {
+	pageVars := PageVars{
+		Title: "Practice Diary",
+	}
+	render(w, "diary.html", pageVars)
+}
+
+func Duets(w http.ResponseWriter, r *http.Request) {
+	pageVars := PageVars{
+		Title: "Practice Duets",
+	}
+	render(w, "duets.html", pageVars)
+}
+
+func render(w http.ResponseWriter, tmpl string, pageVars PageVars) {
+
+	tmpl = fmt.Sprintf("templates/%s", tmpl) // prefix the name passed in with templates/
+	t, err := template.ParseFiles(tmpl)      //parse the template file held in the templates folder
+
+	if err != nil { // if there is an error
+		log.Print("template parsing error: ", err) // log it
+	}
+
+	err = t.Execute(w, pageVars) //execute the template and pass in the variables to fill the gaps
+
+	if err != nil { // if there is an error
+		log.Print("template executing error: ", err) //log it
+	}
+}
+
+func setDefaultScaleOptions() ([]ScaleOptions, []ScaleOptions, []ScaleOptions, []ScaleOptions) {
+
+	//set the default scaleOptions for scales and arpeggios
+	sOptions := []ScaleOptions{
+		ScaleOptions{"Scalearp", "Scale", true, "Scales"},
+		ScaleOptions{"Scalearp", "Arpeggio", false, "Arpeggios"},
+	}
+
+	//set the default PitchOptions for scales and arpeggios
+	pOptions := []ScaleOptions{
+		ScaleOptions{"Pitch", "Major", true, "Major"},
+		ScaleOptions{"Pitch", "Minor", false, "Minor"},
+	}
+
+	// set the default KeyOptions for scales and arpeggios
+	kOptions := []ScaleOptions{
+		ScaleOptions{"Key", "A", true, "A"},
+		ScaleOptions{"Key", "Bb", false, "Bb"},
+		ScaleOptions{"Key", "B", false, "B"},
+		ScaleOptions{"Key", "C", false, "C"},
+		ScaleOptions{"Key", "C#/Db", false, "C#/Db"},
+		ScaleOptions{"Key", "D", false, "D"},
+		ScaleOptions{"Key", "Eb", false, "Eb"},
+		ScaleOptions{"Key", "E", false, "E"},
+		ScaleOptions{"Key", "F", false, "F"},
+		ScaleOptions{"Key", "F#/Gb", false, "F#/Gb"},
+		ScaleOptions{"Key", "G", false, "G"},
+		ScaleOptions{"Key", "G#/Ab", false, "G#/Ab"},
+	}
+
+	// set the default OctaveOptions for scales and arpeggios
+	oOptions := []ScaleOptions{
+		ScaleOptions{"Octave", "1", true, "1 Octave"},
+		ScaleOptions{"Octave", "2", false, "2 Octave"},
+	}
+	return sOptions, pOptions, kOptions, oOptions
+}
+
+func setKeyOptions(key string)(kOptions []ScaleOptions){
 	switch key {
 	case "A":
 		kOptions = []ScaleOptions{
@@ -303,189 +479,13 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	//generate a path to the associated img
-	path := "img/"
-	if pitch == "Major" {
-		path += "major/"           // add "major/" to the path to find the image of the scale
-		pOptions = []ScaleOptions{ // if major was selected, set major isChecked to true and minor isChecked to false
-			ScaleOptions{"Pitch", "Major", true, "Major"},
-			ScaleOptions{"Pitch", "Minor", false, "Minor"},
-		}
-		// for major scales if the key is longer than 2 characters, we only care about the last 2 characters
-		if len(key) > 2 {
-			key = key[3:]
-		}
-	}
+	return kOptions
+}
 
-	if pitch == "Minor" {
-		path += "minor/"           // add "minor/" to the path to find the image of the scale
-		pOptions = []ScaleOptions{ // if minor was selected, set minor isChecked to true and major isChecked to false
-			ScaleOptions{"Pitch", "Major", false, "Major"},
-			ScaleOptions{"Pitch", "Minor", true, "Minor"},
-		}
-		// for minor scales if the key is longer than 2 characters, we only care about the first 2 characters
-		if len(key) > 2 {
-			key = key[:2]
-		}
-	}
-
-	path += strings.ToLower(key) // path to images must be lowercase
-
-	// if path to images contains # replace the # with an s
+func changeSharpToS(path string) string{
 	if strings.Contains(path, "#") {
-		path = path[:len(path)-1] // remove the #
+		path = path[:len(path)-1] // remove the last character
 		path += "s"               // replace it with s
 	}
-
-	// persist the selected octave options
-	if octave == "1" {
-		oOptions = []ScaleOptions{
-			ScaleOptions{"Octave", "1", true, "1 Octave"},
-			ScaleOptions{"Octave", "2", false, "2 Octave"},
-		}
-	} else {
-		oOptions = []ScaleOptions{
-			ScaleOptions{"Octave", "1", false, "1 Octave"},
-			ScaleOptions{"Octave", "2", true, "2 Octave"},
-		}
-	}
-
-	if scalearp == "Scale" {
-		sOptions = []ScaleOptions{
-			ScaleOptions{"Scalearp", "Scale", true, "Scales"},
-			ScaleOptions{"Scalearp", "Arpeggio", false, "Arpeggios"},
-		}
-	} else {
-		sOptions = []ScaleOptions{
-			ScaleOptions{"Scalearp", "Scale", false, "Scales"},
-			ScaleOptions{"Scalearp", "Arpeggio", true, "Arpeggios"},
-		}
-	}
-
-	//audioPath is a new copy of the img path
-	audioPath := path
-	// replace the "img" in the path with "mp3"
-	audioPath = strings.Replace(audioPath, "img", "mp3", 1)
-	//define audiopath2 as a blank string, this path is used for melodic minor scales
-	audioPath2 := ""
-
-	if pitch == "Major" {
-
-		switch octave {
-		case "1":
-			path += "1.png"
-
-		case "2":
-			path += "2.png"
-
-		}
-	} else {
-		switch octave {
-		case "1":
-			path += "1.png"
-
-		case "2":
-			path += "2.png"
-
-		}
-	}
-
-	if pitch == "Major" && octave == "1" {
-		audioPath += "1.mp3"
-	}
-	if pitch == "Major" && octave == "2" {
-		audioPath += "2.mp3"
-	}
-	if pitch == "Minor" && octave == "1" {
-		audioPath2 = audioPath
-		audioPath += "1h.mp3"
-		audioPath2 += "1m.mp3"
-	}
-	if pitch == "Minor" && octave == "2" {
-		audioPath2 = audioPath
-		audioPath += "2h.mp3"
-		audioPath2 += "2m.mp3"
-	}
-
-	pageVars := PageVars{
-		Title:         "Practice Scales and Arpeggios",
-		Key:           key,
-		Pitch:         pitch,
-		ScaleImgPath:  path,
-		AudioPath:     audioPath,
-		AudioPath2:    audioPath2,
-		ScaleOptions:  sOptions,
-		PitchOptions:  pOptions,
-		KeyOptions:    kOptions,
-		OctaveOptions: oOptions,
-	}
-	render(w, "scale.html", pageVars)
-}
-
-func Diary(w http.ResponseWriter, r *http.Request) {
-	pageVars := PageVars{
-		Title: "Practice Diary",
-	}
-	render(w, "diary.html", pageVars)
-}
-
-func Duets(w http.ResponseWriter, r *http.Request) {
-	pageVars := PageVars{
-		Title: "Practice Duets",
-	}
-	render(w, "duets.html", pageVars)
-}
-
-func render(w http.ResponseWriter, tmpl string, pageVars PageVars) {
-
-	tmpl = fmt.Sprintf("templates/%s", tmpl) // prefix the name passed in with templates/
-	t, err := template.ParseFiles(tmpl)      //parse the template file held in the templates folder
-
-	if err != nil { // if there is an error
-		log.Print("template parsing error: ", err) // log it
-	}
-
-	err = t.Execute(w, pageVars) //execute the template and pass in the variables to fill the gaps
-
-	if err != nil { // if there is an error
-		log.Print("template executing error: ", err) //log it
-	}
-}
-
-func setDefaultScaleOptions() ([]ScaleOptions, []ScaleOptions, []ScaleOptions, []ScaleOptions) {
-
-	//set the default scaleOptions for scales and arpeggios
-	sOptions := []ScaleOptions{
-		ScaleOptions{"Scalearp", "Scale", true, "Scales"},
-		ScaleOptions{"Scalearp", "Arpeggio", false, "Arpeggios"},
-	}
-
-	//set the default PitchOptions for scales and arpeggios
-	pOptions := []ScaleOptions{
-		ScaleOptions{"Pitch", "Major", true, "Major"},
-		ScaleOptions{"Pitch", "Minor", false, "Minor"},
-	}
-
-	// set the default KeyOptions for scales and arpeggios
-	kOptions := []ScaleOptions{
-		ScaleOptions{"Key", "A", true, "A"},
-		ScaleOptions{"Key", "Bb", false, "Bb"},
-		ScaleOptions{"Key", "B", false, "B"},
-		ScaleOptions{"Key", "C", false, "C"},
-		ScaleOptions{"Key", "C#/Db", false, "C#/Db"},
-		ScaleOptions{"Key", "D", false, "D"},
-		ScaleOptions{"Key", "Eb", false, "Eb"},
-		ScaleOptions{"Key", "E", false, "E"},
-		ScaleOptions{"Key", "F", false, "F"},
-		ScaleOptions{"Key", "F#/Gb", false, "F#/Gb"},
-		ScaleOptions{"Key", "G", false, "G"},
-		ScaleOptions{"Key", "G#/Ab", false, "G#/Ab"},
-	}
-
-	// set the default OctaveOptions for scales and arpeggios
-	oOptions := []ScaleOptions{
-		ScaleOptions{"Octave", "1", true, "1 Octave"},
-		ScaleOptions{"Octave", "2", false, "2 Octave"},
-	}
-	return sOptions, pOptions, kOptions, oOptions
+	return path
 }
