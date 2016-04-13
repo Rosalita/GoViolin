@@ -60,39 +60,8 @@ func Home(w http.ResponseWriter, req *http.Request) {
 
 func Scale(w http.ResponseWriter, req *http.Request) {
 
-	//populate the default ScaleOptions for scales and arpeggios
-	sOptions := []ScaleOptions{
-		ScaleOptions{"Scalearp", "Scale", true, "Scales"},
-		ScaleOptions{"Scalearp", "Arpeggio", false, "Arpeggios"},
-	}
-
-	//populate the default PitchOptions for scales and arpeggios
-	pOptions := []ScaleOptions{
-		ScaleOptions{"Pitch", "Major", true, "Major"},
-		ScaleOptions{"Pitch", "Minor", false, "Minor"},
-	}
-
-	// populate the default KeyOptions for scales and arpeggios
-	kOptions := []ScaleOptions{
-		ScaleOptions{"Key", "A", true, "A"},
-		ScaleOptions{"Key", "Bb", false, "Bb"},
-		ScaleOptions{"Key", "B", false, "B"},
-		ScaleOptions{"Key", "C", false, "C"},
-		ScaleOptions{"Key", "C#/Db", false, "C#/Db"},
-		ScaleOptions{"Key", "D", false, "D"},
-		ScaleOptions{"Key", "Eb", false, "Eb"},
-		ScaleOptions{"Key", "E", false, "E"},
-		ScaleOptions{"Key", "F", false, "F"},
-		ScaleOptions{"Key", "F#/Gb", false, "F#/Gb"},
-		ScaleOptions{"Key", "G", false, "G"},
-		ScaleOptions{"Key", "G#/Ab", false, "G#/Ab"},
-	}
-
-	// populate the default OctaveOptions for scales and arpeggios
-	oOptions := []ScaleOptions{
-		ScaleOptions{"Octave", "1", true, "1 Octave"},
-		ScaleOptions{"Octave", "2", false, "2 Octave"},
-	}
+	//populate the default ScaleOptions, PitchOptions, KeyOptions, OctaveOptions for scales and arpeggios
+	sOptions, pOptions, kOptions, oOptions := setDefaultScaleOptions()
 
 	// set page variables
 	pageVars := PageVars{
@@ -112,39 +81,8 @@ func Scale(w http.ResponseWriter, req *http.Request) {
 // handler for /scaleshow which parses the values submitted from /scale
 func ScaleShow(w http.ResponseWriter, r *http.Request) {
 
-	//populate the default ScaleOptions for scales and arpeggios
-	sOptions := []ScaleOptions{
-		ScaleOptions{"Scalearp", "Scale", true, "Scales"},
-		ScaleOptions{"Scalearp", "Arpeggio", false, "Arpeggios"},
-	}
-
-	//populate the default ScaleArp options for scales or arpeggios
-	pOptions := []ScaleOptions{
-		ScaleOptions{"Pitch", "Major", true, "Major"},
-		ScaleOptions{"Pitch", "Minor", false, "Minor"},
-	}
-
-	// populate the default KeyOptions for scales
-	kOptions := []ScaleOptions{
-		ScaleOptions{"Key", "A", true, "A"},
-		ScaleOptions{"Key", "Bb", false, "Bb"},
-		ScaleOptions{"Key", "B", false, "B"},
-		ScaleOptions{"Key", "C", false, "C"},
-		ScaleOptions{"Key", "C#/Db", false, "C#/Db"},
-		ScaleOptions{"Key", "D", false, "D"},
-		ScaleOptions{"Key", "Eb", false, "Eb"},
-		ScaleOptions{"Key", "E", false, "E"},
-		ScaleOptions{"Key", "F", false, "F"},
-		ScaleOptions{"Key", "F#/Gb", false, "F#/Gb"},
-		ScaleOptions{"Key", "G", false, "G"},
-		ScaleOptions{"Key", "G#/Ab", false, "G#/Ab"},
-	}
-
-	// populate the default OctaveOptions for scales
-	oOptions := []ScaleOptions{
-		ScaleOptions{"Octave", "1", true, "1 Octave"},
-		ScaleOptions{"Octave", "2", false, "2 Octave"},
-	}
+	//populate the default ScaleOptions, PitchOptions, KeyOptions, OctaveOptions for scales and arpeggios
+	sOptions, pOptions, kOptions, oOptions := setDefaultScaleOptions()
 
 	r.ParseForm() //r is url.Values which is a map[string][]string
 
@@ -154,13 +92,13 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 			svalues = append(svalues, value) // stick each value in a slice I know the name of
 		}
 	}
-	sstring := "Scale of "
-	scalearp:=""
+
+	scalearp := ""
 	key := ""
 	pitch := ""
 	octave := ""
 
-	// identify selected key / pitch / octave and stick them in variables for later use.
+	// identify selected scale / arpeggio, pitch, key and octave and store values in variables for later use.
 	for i := 0; i < 4; i++ {
 		switch svalues[i] {
 		case "Major":
@@ -173,7 +111,7 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 			octave = svalues[i]
 		case "Scale":
 			scalearp = svalues[i]
-	  case "Arpeggio":
+		case "Arpeggio":
 			scalearp = svalues[i]
 		default:
 			key = svalues[i]
@@ -368,37 +306,32 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 	//generate a path to the associated img
 	path := "img/"
 	if pitch == "Major" {
-		path += "major/"
-		pOptions = []ScaleOptions{
+		path += "major/"           // add "major/" to the path to find the image of the scale
+		pOptions = []ScaleOptions{ // if major was selected, set major isChecked to true and minor isChecked to false
 			ScaleOptions{"Pitch", "Major", true, "Major"},
 			ScaleOptions{"Pitch", "Minor", false, "Minor"},
 		}
-
 		// for major scales if the key is longer than 2 characters, we only care about the last 2 characters
 		if len(key) > 2 {
 			key = key[3:]
 		}
-		sstring += key + " " + pitch
-
 	}
 
 	if pitch == "Minor" {
-		path += "minor/"
-
-		pOptions = []ScaleOptions{
+		path += "minor/"           // add "minor/" to the path to find the image of the scale
+		pOptions = []ScaleOptions{ // if minor was selected, set minor isChecked to true and major isChecked to false
 			ScaleOptions{"Pitch", "Major", false, "Major"},
 			ScaleOptions{"Pitch", "Minor", true, "Minor"},
 		}
-
+		// for minor scales if the key is longer than 2 characters, we only care about the first 2 characters
 		if len(key) > 2 {
 			key = key[:2]
 		}
-		sstring += key + " " + pitch
 	}
 
-	path += strings.ToLower(key)
+	path += strings.ToLower(key) // path to images must be lowercase
 
-	// if path string contains # replace the # with an s
+	// if path to images contains # replace the # with an s
 	if strings.Contains(path, "#") {
 		path = path[:len(path)-1] // remove the #
 		path += "s"               // replace it with s
@@ -417,7 +350,7 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	if scalearp == "Scale"{
+	if scalearp == "Scale" {
 		sOptions = []ScaleOptions{
 			ScaleOptions{"Scalearp", "Scale", true, "Scales"},
 			ScaleOptions{"Scalearp", "Arpeggio", false, "Arpeggios"},
@@ -433,29 +366,29 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 	audioPath := path
 	// replace the "img" in the path with "mp3"
 	audioPath = strings.Replace(audioPath, "img", "mp3", 1)
-	//audiopath2 as a blank string, this path is used for melodic minor scales
+	//define audiopath2 as a blank string, this path is used for melodic minor scales
 	audioPath2 := ""
 
-if pitch == "Major"{
+	if pitch == "Major" {
 
-	switch octave {
-	case "1":
-		path += "1.png"
+		switch octave {
+		case "1":
+			path += "1.png"
 
-	case "2":
-		path += "2.png"
+		case "2":
+			path += "2.png"
 
+		}
+	} else {
+		switch octave {
+		case "1":
+			path += "1.png"
+
+		case "2":
+			path += "2.png"
+
+		}
 	}
-} else {
-	switch octave {
-	case "1":
-		path += "1.png"
-
-	case "2":
-		path += "2.png"
-
-	}
-}
 
 	if pitch == "Major" && octave == "1" {
 		audioPath += "1.mp3"
@@ -475,7 +408,7 @@ if pitch == "Major"{
 	}
 
 	pageVars := PageVars{
-		Title:         sstring,
+		Title:         "Practice Scales and Arpeggios",
 		Key:           key,
 		Pitch:         pitch,
 		ScaleImgPath:  path,
@@ -488,7 +421,6 @@ if pitch == "Major"{
 	}
 	render(w, "scale.html", pageVars)
 }
-
 
 func Diary(w http.ResponseWriter, r *http.Request) {
 	pageVars := PageVars{
@@ -504,7 +436,6 @@ func Duets(w http.ResponseWriter, r *http.Request) {
 	render(w, "duets.html", pageVars)
 }
 
-
 func render(w http.ResponseWriter, tmpl string, pageVars PageVars) {
 
 	tmpl = fmt.Sprintf("templates/%s", tmpl) // prefix the name passed in with templates/
@@ -519,4 +450,42 @@ func render(w http.ResponseWriter, tmpl string, pageVars PageVars) {
 	if err != nil { // if there is an error
 		log.Print("template executing error: ", err) //log it
 	}
+}
+
+func setDefaultScaleOptions() ([]ScaleOptions, []ScaleOptions, []ScaleOptions, []ScaleOptions) {
+
+	//set the default scaleOptions for scales and arpeggios
+	sOptions := []ScaleOptions{
+		ScaleOptions{"Scalearp", "Scale", true, "Scales"},
+		ScaleOptions{"Scalearp", "Arpeggio", false, "Arpeggios"},
+	}
+
+	//set the default PitchOptions for scales and arpeggios
+	pOptions := []ScaleOptions{
+		ScaleOptions{"Pitch", "Major", true, "Major"},
+		ScaleOptions{"Pitch", "Minor", false, "Minor"},
+	}
+
+	// set the default KeyOptions for scales and arpeggios
+	kOptions := []ScaleOptions{
+		ScaleOptions{"Key", "A", true, "A"},
+		ScaleOptions{"Key", "Bb", false, "Bb"},
+		ScaleOptions{"Key", "B", false, "B"},
+		ScaleOptions{"Key", "C", false, "C"},
+		ScaleOptions{"Key", "C#/Db", false, "C#/Db"},
+		ScaleOptions{"Key", "D", false, "D"},
+		ScaleOptions{"Key", "Eb", false, "Eb"},
+		ScaleOptions{"Key", "E", false, "E"},
+		ScaleOptions{"Key", "F", false, "F"},
+		ScaleOptions{"Key", "F#/Gb", false, "F#/Gb"},
+		ScaleOptions{"Key", "G", false, "G"},
+		ScaleOptions{"Key", "G#/Ab", false, "G#/Ab"},
+	}
+
+	// set the default OctaveOptions for scales and arpeggios
+	oOptions := []ScaleOptions{
+		ScaleOptions{"Octave", "1", true, "1 Octave"},
+		ScaleOptions{"Octave", "2", false, "2 Octave"},
+	}
+	return sOptions, pOptions, kOptions, oOptions
 }
