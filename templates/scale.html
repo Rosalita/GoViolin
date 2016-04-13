@@ -56,8 +56,7 @@
 {{end}}
 
 <div class ="audioheader">
-{{with $3:= .AudioPath}}  <span class="scale1name"> {{end}} {{if eq .Pitch "Major" }} Listen to Major scale {{else}} Listen to Harmonic Minor scale {{end}} {{with $3:= .AudioPath}} </span> {{end}}
-{{with $4:= .AudioPath2}} Listen to Melodic Minor scale {{end}}
+{{with $3:= .AudioPath}}  <span class="scale1name"> {{end}} {{.LeftLabel}} {{with $3:= .AudioPath}} </span> {{end}} {{.RightLabel}}
 </div>
 
 

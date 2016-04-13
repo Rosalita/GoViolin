@@ -10,12 +10,14 @@ import (
 
 type PageVars struct {
 	Title         string
-	Headline      string
+	Scalearp      string
 	Key           string
 	Pitch         string
 	ScaleImgPath  string
 	AudioPath     string
 	AudioPath2    string
+	LeftLabel     string
+	RightLabel    string
 	ScaleOptions  []ScaleOptions
 	PitchOptions  []ScaleOptions
 	KeyOptions    []ScaleOptions
@@ -65,12 +67,15 @@ func Scale(w http.ResponseWriter, req *http.Request) {
 	sOptions, pOptions, kOptions, oOptions := setDefaultScaleOptions()
 
 	// set page variables
-	pageVars := PageVars{
+	  pageVars := PageVars{
 		Title:         "Practice Scales and Arpeggios", // default scale initially displayed is A Major
-		ScaleImgPath:  "img/major/a1.png",
-		AudioPath:     "mp3/major/a1.mp3",
+		Scalearp:      "Scale",
 		Pitch:         "Major",
 		Key:           "A",
+		ScaleImgPath:  "img/major/a1.png",
+		AudioPath:     "mp3/major/a1.mp3",
+		LeftLabel:     "Listen to Major scale",
+		RightLabel:    "",
 		ScaleOptions:  sOptions,
 		PitchOptions:  pOptions,
 		KeyOptions:    kOptions,
@@ -95,7 +100,7 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 	}
 
 
-	scalearp, key, pitch, octave := "", "", "", ""
+	scalearp, key, pitch, octave, leftlabel, rightlabel := "", "", "", "", "", ""
 
 
 	// the slice of values return by the request can be arranged in any order
@@ -119,6 +124,29 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+//set the labels
+
+if pitch == "Major"{
+	leftlabel = "Listen to Major "
+	rightlabel = "Listen to Drone"
+	if scalearp == "Scale"{
+		leftlabel += "Scale"
+	} else {
+		leftlabel += "Arpeggio"
+	}
+} else {
+	if scalearp == "Arpeggio"{
+		leftlabel += "Listen to Minor Arpeggio"
+		rightlabel = "Listen to Drone"
+	} else {
+		leftlabel += "Listen to Harmonic Minor Scale"
+		rightlabel += "Listen to Melodic Minor Scale"
+	}
+}
+
+
+
+
 // update the key options based on users selection to set isChecked true for selected key and false for all other keys
 kOptions = setKeyOptions(key)
 
@@ -134,11 +162,15 @@ kOptions = setKeyOptions(key)
 			ScaleOptions{"Scalearp", "Scale", false, true, "Scales"},
 			ScaleOptions{"Scalearp", "Arpeggio", false, false, "Arpeggios"},
 		}
+
+
 	} else {
 		// if arpeggio is selected set arpeggio isChecked to true and scale isChecked to false
 		sOptions = []ScaleOptions{
 			ScaleOptions{"Scalearp", "Scale", false, false, "Scales"},
 			ScaleOptions{"Scalearp", "Arpeggio", false, true, "Arpeggios"},
+
+
 		}
 
 		// if arpeggio is selected, add "arps/" to the img and mp3 paths
@@ -218,7 +250,7 @@ kOptions = setKeyOptions(key)
 		}
 	}
 
-// force some options and disable some choices if the user has selected arpeggios
+// if arpeggios is selected, disable the 1 octave radio button and default to 2 octaves
 if scalearp == "Arpeggio" {
 
 	oOptions = []ScaleOptions{
@@ -226,11 +258,6 @@ if scalearp == "Arpeggio" {
 		ScaleOptions{"Octave", "2", false, true, "2 Octave"},
 	}
 
-  pOptions = []ScaleOptions{ // if minor was selected, set minor isChecked to true and major isChecked to false
-	    	ScaleOptions{"Pitch", "Major", false, true, "Major"},
-		    ScaleOptions{"Pitch", "Minor", true, false, "Minor"},
-
-	}
 
   // if any of the existing paths contain a 1, replace with 2
   if strings.Contains(imgPath, "1"){
@@ -241,31 +268,20 @@ if scalearp == "Arpeggio" {
 		audioPath = audioPath[:len(audioPath)-5]
 		audioPath += "2.mp3"
   }
-	if strings.Contains(imgPath, "minor"){
-		start:= imgPath[:len(imgPath)-12]
-		end:= imgPath[14:]
-		imgPath = start
-		imgPath += "major"
-		imgPath += end
-	}
-	if strings.Contains(audioPath, "minor"){
-		start:= audioPath[:len(audioPath)-12]
-		end:= audioPath[14:]
-		audioPath = start
-		audioPath += "major"
-		audioPath += end
-	}
 
 }
 
 
 	pageVars := PageVars{
 		Title:         "Practice Scales and Arpeggios",
+		Scalearp:      scalearp,
 		Key:           key,
 		Pitch:         pitch,
 		ScaleImgPath:  imgPath,
 		AudioPath:     audioPath,
 		AudioPath2:    audioPath2,
+		LeftLabel:     leftlabel,
+		RightLabel:    rightlabel,
 		ScaleOptions:  sOptions,
 		PitchOptions:  pOptions,
 		KeyOptions:    kOptions,
