@@ -8,11 +8,12 @@
  */
 
  /* alternative theme including white
-  white - #ffffff
+  offwhite - #f8f8f8
   cream - #f2e5bd
   apple - #b9bf83
   pear - #a69f7c
   chocolate - #8c6865
+  black - #000000
  */
 
 
@@ -20,6 +21,7 @@
  * {
 margin: 0;
 padding: 0;
+font-family: 'Rosario', sans-serif; !important;
 }
 
 body {
@@ -44,7 +46,7 @@ nav ul {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color:#f2e5bd;
+    background-color:#a69f7c;
     position: fixed;
     top: 0;
     width: 100%;
@@ -62,7 +64,7 @@ nav li:last-child {
 
 nav li a {
     display: inline-block;
-    color: #a69f7c;
+    color: #f2e5bd;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
@@ -70,11 +72,16 @@ nav li a {
 
 
 nav li a:hover {
-    color: #b9bf83;
+    color: #8c6865;
 }
 
 .active {
     background-color:  #f8f8f8;
+    color: #8c6865;
+}
+a.active:hover{
+  color: #8c6865;
+
 }
 
 .mainbody{
@@ -111,9 +118,14 @@ nav li a:hover {
     color: #a69f7c;
 }
 .scale1name {
-margin-right:145px;
+  position: relative;
+
 }
 
+.scale2name {
+  position: absolute;
+  left: 400px;
+}
 
 .looptext{
     color: #a69f7c;
