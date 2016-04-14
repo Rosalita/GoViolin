@@ -25,11 +25,11 @@ type PageVars struct {
 }
 
 type ScaleOptions struct {
-	Name      string
-	Value     string
+	Name       string
+	Value      string
 	IsDisabled bool
-	IsChecked bool
-	Text      string
+	IsChecked  bool
+	Text       string
 }
 
 func main() {
@@ -67,15 +67,16 @@ func Scale(w http.ResponseWriter, req *http.Request) {
 	sOptions, pOptions, kOptions, oOptions := setDefaultScaleOptions()
 
 	// set page variables
-	  pageVars := PageVars{
+	pageVars := PageVars{
 		Title:         "Practice Scales and Arpeggios", // default scale initially displayed is A Major
 		Scalearp:      "Scale",
 		Pitch:         "Major",
 		Key:           "A",
 		ScaleImgPath:  "img/major/a1.png",
 		AudioPath:     "mp3/major/a1.mp3",
+		AudioPath2:    "mp3/drone/a1.mp3",
 		LeftLabel:     "Listen to Major scale",
-		RightLabel:    "",
+		RightLabel:    "Listen to Drone",
 		ScaleOptions:  sOptions,
 		PitchOptions:  pOptions,
 		KeyOptions:    kOptions,
@@ -99,9 +100,7 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-
 	scalearp, key, pitch, octave, leftlabel, rightlabel := "", "", "", "", "", ""
-
 
 	// the slice of values return by the request can be arranged in any order
 	// so identify selected scale / arpeggio, pitch, key and octave and store values in variables for later use.
@@ -124,37 +123,33 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-//set the labels
+	//set the labels
 
-if pitch == "Major"{
-	leftlabel = "Listen to Major "
-	rightlabel = "Listen to Drone"
-	if scalearp == "Scale"{
-		leftlabel += "Scale"
-	} else {
-		leftlabel += "Arpeggio"
-	}
-} else {
-	if scalearp == "Arpeggio"{
-		leftlabel += "Listen to Minor Arpeggio"
+	if pitch == "Major" {
+		leftlabel = "Listen to Major "
 		rightlabel = "Listen to Drone"
+		if scalearp == "Scale" {
+			leftlabel += "Scale"
+		} else {
+			leftlabel += "Arpeggio"
+		}
 	} else {
-		leftlabel += "Listen to Harmonic Minor Scale"
-		rightlabel += "Listen to Melodic Minor Scale"
+		if scalearp == "Arpeggio" {
+			leftlabel += "Listen to Minor Arpeggio"
+			rightlabel = "Listen to Drone"
+		} else {
+			leftlabel += "Listen to Harmonic Minor Scale"
+			rightlabel += "Listen to Melodic Minor Scale"
+		}
 	}
-}
 
-
-
-
-// update the key options based on users selection to set isChecked true for selected key and false for all other keys
-kOptions = setKeyOptions(key)
-
+	// update the key options based on users selection to set isChecked true for selected key and false for all other keys
+	kOptions = setKeyOptions(key)
 
 	//intialise paths to the associated images and mp3s
 	imgPath := "img/"
 	audioPath := "mp3/"
-	audioPath2 := "" // audio path2 is only used for minor scales as they have 2 mp3s
+	audioPath2 := "mp3/" // audio path2 is used for drone notes when major scale or arpeggio selected and melodic minors when minor scale is selected
 
 	if scalearp == "Scale" {
 		// if scale is selected set scale isChecked to true and arpeggio isChecked to false
@@ -163,24 +158,28 @@ kOptions = setKeyOptions(key)
 			ScaleOptions{"Scalearp", "Arpeggio", false, false, "Arpeggios"},
 		}
 
+		if pitch == "Minor"{
+		 audioPath2 += "minor/"
+		} else {
+		audioPath2 += "drone/"
+		}
 
 	} else {
 		// if arpeggio is selected set arpeggio isChecked to true and scale isChecked to false
 		sOptions = []ScaleOptions{
 			ScaleOptions{"Scalearp", "Scale", false, false, "Scales"},
 			ScaleOptions{"Scalearp", "Arpeggio", false, true, "Arpeggios"},
-
-
 		}
 
-		// if arpeggio is selected, add "arps/" to the img and mp3 paths
+		// if arpeggio is selected, add "arps/" to the img and mp3 paths and "drone/" to the second audioPath
 		imgPath += "arps/"
 		audioPath += "arps/"
+		audioPath2 += "drone/"
 	}
 
 	if pitch == "Major" {
-		imgPath += "major/"           // add "major/" to the image path to find the image
-		audioPath +="major/"          // add "major/" to the audio path to find the mp3
+		imgPath += "major/"        // add "major/" to the image path to find the image
+		audioPath += "major/"      // add "major/" to the audio path to find the mp3
 		pOptions = []ScaleOptions{ // if major was selected, set major isChecked to true and minor isChecked to false
 			ScaleOptions{"Pitch", "Major", false, true, "Major"},
 			ScaleOptions{"Pitch", "Minor", false, false, "Minor"},
@@ -191,21 +190,24 @@ kOptions = setKeyOptions(key)
 		}
 		imgPath += strings.ToLower(key) // keys must be added to the path as lower case
 		audioPath += strings.ToLower(key)
+		audioPath2 += strings.ToLower(key)
 		switch octave {
 		case "1":
 			imgPath += "1.png"
 			audioPath += "1.mp3"
+			audioPath2 += "1.mp3"
 
 		case "2":
 			imgPath += "2.png"
 			audioPath += "2.mp3"
+			audioPath2 += "2.mp3"
 		}
 
 	}
 
 	if pitch == "Minor" {
 		imgPath += "minor/"        // add "minor/" to the image path to find the image
-		audioPath +="minor/"       // add "minor/" to the audio path to find the mp3
+		audioPath += "minor/"      // add "minor/" to the audio path to find the mp3
 		pOptions = []ScaleOptions{ // if minor was selected, set minor isChecked to true and major isChecked to false
 			ScaleOptions{"Pitch", "Major", false, false, "Major"},
 			ScaleOptions{"Pitch", "Minor", false, true, "Minor"},
@@ -216,26 +218,34 @@ kOptions = setKeyOptions(key)
 		}
 		imgPath += strings.ToLower(key) // keys must be added to the path as lower case
 		audioPath += strings.ToLower(key)
+		audioPath2 += strings.ToLower(key)
 
 		// minor scales can contain # change this to an s in the path
-    imgPath = changeSharpToS(imgPath)
+		imgPath = changeSharpToS(imgPath)
 		audioPath = changeSharpToS(audioPath)
+		audioPath2 = changeSharpToS(audioPath2)
 
 		switch octave {
 		case "1":
 			imgPath += "1.png"
-			audioPath2 = audioPath
-			audioPath += "1h.mp3"
-			audioPath2 += "1m.mp3"
-
+			if scalearp == "Scale" {
+				audioPath += "1h.mp3"
+				audioPath2 += "1m.mp3"
+			} else { // this is an arpeggio
+				audioPath += "1.mp3"
+				audioPath2 += "1.mp3"
+			}
 		case "2":
 			imgPath += "2.png"
-			audioPath2 = audioPath
-			audioPath += "2h.mp3"
-			audioPath2 += "2m.mp3"
+			if scalearp == "Scale" {
+				audioPath += "2h.mp3"
+				audioPath2 += "2m.mp3"
+			} else { // this is an arpeggio
+				audioPath += "2.mp3"
+				audioPath2 += "2.mp3"
+			}
 		}
 	}
-
 
 	// persist the selected octave options
 	if octave == "1" {
@@ -250,27 +260,31 @@ kOptions = setKeyOptions(key)
 		}
 	}
 
-// if arpeggios is selected, disable the 1 octave radio button and default to 2 octaves
-if scalearp == "Arpeggio" {
+	// if arpeggios is selected, disable the 1 octave radio button and default to 2 octaves
+	if scalearp == "Arpeggio" {
 
-	oOptions = []ScaleOptions{
-		ScaleOptions{"Octave", "1", true, false, "1 Octave"},
-		ScaleOptions{"Octave", "2", false, true, "2 Octave"},
+		oOptions = []ScaleOptions{
+			ScaleOptions{"Octave", "1", true, false, "1 Octave"},
+			ScaleOptions{"Octave", "2", false, true, "2 Octave"},
+		}
+
+		// if any of the existing paths contain a 1, replace with 2
+		if strings.Contains(imgPath, "1") {
+			imgPath = imgPath[:len(imgPath)-5]
+			imgPath += "2.png"
+		}
+		if strings.Contains(audioPath, "1") {
+			audioPath = audioPath[:len(audioPath)-5]
+			audioPath += "2.mp3"
+		}
+
+		// if any of the existing audioPath2's contain a 1, replace with a 2
+		if strings.Contains(audioPath2, "1") {
+			audioPath2 = audioPath2[:len(audioPath2)-5]
+			audioPath2 += "2.mp3"
+		}
+
 	}
-
-
-  // if any of the existing paths contain a 1, replace with 2
-  if strings.Contains(imgPath, "1"){
-		imgPath = imgPath[:len(imgPath)-5]
-		imgPath += "2.png"
-	}
-  if strings.Contains(audioPath, "1"){
-		audioPath = audioPath[:len(audioPath)-5]
-		audioPath += "2.mp3"
-  }
-
-}
-
 
 	pageVars := PageVars{
 		Title:         "Practice Scales and Arpeggios",
@@ -346,7 +360,7 @@ func setDefaultScaleOptions() ([]ScaleOptions, []ScaleOptions, []ScaleOptions, [
 		ScaleOptions{"Key", "E", false, false, "E"},
 		ScaleOptions{"Key", "F", false, false, "F"},
 		ScaleOptions{"Key", "F#/Gb", false, false, "F#/Gb"},
-		ScaleOptions{"Key", "G", false, false,  "G"},
+		ScaleOptions{"Key", "G", false, false, "G"},
 		ScaleOptions{"Key", "G#/Ab", false, false, "G#/Ab"},
 	}
 
@@ -358,7 +372,7 @@ func setDefaultScaleOptions() ([]ScaleOptions, []ScaleOptions, []ScaleOptions, [
 	return sOptions, pOptions, kOptions, oOptions
 }
 
-func setKeyOptions(key string)(kOptions []ScaleOptions){
+func setKeyOptions(key string) (kOptions []ScaleOptions) {
 	switch key {
 	case "A":
 		kOptions = []ScaleOptions{
@@ -546,7 +560,7 @@ func setKeyOptions(key string)(kOptions []ScaleOptions){
 	return kOptions
 }
 
-func changeSharpToS(path string) string{
+func changeSharpToS(path string) string {
 	if strings.Contains(path, "#") {
 		path = path[:len(path)-1] // remove the last character
 		path += "s"               // replace it with s
