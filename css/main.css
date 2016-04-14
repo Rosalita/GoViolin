@@ -1,10 +1,18 @@
 
-/* Colour theme
+/* Ubuntu-ish Colour theme
    Dark brown - #332532
    Light brown - #644D52
    Peach - #F77A52
    sunshine - #FF974F
    grey blue - #A49A87
+ */
+
+ /* alternative theme including white
+  white - #ffffff
+  cream - #f2e5bd
+  apple - #b9bf83
+  pear - #a69f7c
+  chocolate - #8c6865
  */
 
 
@@ -15,18 +23,18 @@ padding: 0;
 }
 
 body {
-    background-color: #332532;
+    background-color: #f8f8f8;
 }
 
 h1 {
-    color: #FF974F;
+    color: #8c6865;
     margin-left: 20px;
     margin-top: 20px;
     margin-bottom: 10px
 }
 
 p {
-  color: #F77A52;
+  color: #a69f7c;
   margin-left: 20px;
   margin-bottom: 20px;
 }
@@ -36,7 +44,7 @@ nav ul {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #644D52;
+    background-color:#f2e5bd;
     position: fixed;
     top: 0;
     width: 100%;
@@ -44,7 +52,7 @@ nav ul {
 
 nav li {
   float: left;
-  border-right: 1px solid #A49A87;
+  border-right: 1px solid #b9bf83;
 }
 
 
@@ -54,7 +62,7 @@ nav li:last-child {
 
 nav li a {
     display: inline-block;
-    color: #A49A87;
+    color: #a69f7c;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
@@ -62,11 +70,11 @@ nav li a {
 
 
 nav li a:hover {
-    color: #F77A52;
+    color: #b9bf83;
 }
 
 .active {
-    background-color:  #332532;
+    background-color:  #f8f8f8;
 }
 
 .mainbody{
@@ -75,7 +83,7 @@ nav li a:hover {
 
 .optionselect{
 
-  color: #A49A87;
+  color:#a69f7c;
   margin-left: 50px;
 
 }
@@ -100,7 +108,7 @@ nav li a:hover {
     margin-left: 50px;
     margin-bottom: 10px;
     text-align:left;
-    color: #FF974F;
+    color: #a69f7c;
 }
 .scale1name {
 margin-right:145px;
@@ -108,7 +116,7 @@ margin-right:145px;
 
 
 .looptext{
-    color: #A49A87;
+    color: #a69f7c;
 }
 .submit{
     margin-top: 10px;
@@ -116,12 +124,12 @@ margin-right:145px;
 
 .scalearpselect{
   margin-top: 10px;
-  color: #A49A87;
+  color: #a69f7c;
 }
 
 .pitchselect{
   margin-top: 10px;
-  color: #A49A87;
+  color:#a69f7c;
 }
 
 .keyselect{
