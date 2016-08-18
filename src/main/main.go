@@ -14,6 +14,7 @@ type PageVars struct {
 	Key           string
 	Pitch         string
 	ScaleImgPath  string
+	GifPath       string
 	AudioPath     string
 	AudioPath2    string
 	LeftLabel     string
@@ -73,6 +74,7 @@ func Scale(w http.ResponseWriter, req *http.Request) {
 		Pitch:         "Major",
 		Key:           "A",
 		ScaleImgPath:  "img/major/a1.png",
+		GifPath:       "img/major/gif/a1.gif",
 		AudioPath:     "mp3/major/a1.mp3",
 		AudioPath2:    "mp3/drone/a1.mp3",
 		LeftLabel:     "Listen to Major scale",
@@ -292,6 +294,7 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 		Key:           key,
 		Pitch:         pitch,
 		ScaleImgPath:  imgPath,
+		GifPath:       "img/major/gif/a1.gif",
 		AudioPath:     audioPath,
 		AudioPath2:    audioPath2,
 		LeftLabel:     leftlabel,
