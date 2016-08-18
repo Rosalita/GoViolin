@@ -16,6 +16,14 @@
   black - #000000
  */
 
+ /* lavender theme including white
+  purple - #6765AD
+  blue - #8FB0FF
+  offwhite - #F8F8F8
+  lightgreen - #89B28A
+  darkgreen - #577043
+  black - #000000
+ */
 
 /* reset all margins and padding*/
  * {
@@ -29,14 +37,14 @@ body {
 }
 
 h1 {
-    color: #8c6865;
+    color: #6765AD;
     margin-left: 20px;
     margin-top: 20px;
     margin-bottom: 10px
 }
 
 p {
-  color: #a69f7c;
+  color: #577043;
   margin-left: 20px;
   margin-bottom: 20px;
 }
@@ -46,7 +54,7 @@ nav ul {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color:#a69f7c;
+    background-color:#89B28A;
     position: fixed;
     top: 0;
     width: 100%;
@@ -54,7 +62,7 @@ nav ul {
 
 nav li {
   float: left;
-  border-right: 1px solid #b9bf83;
+  border-right: 1px solid #577043;
 }
 
 
@@ -64,7 +72,7 @@ nav li:last-child {
 
 nav li a {
     display: inline-block;
-    color: #f2e5bd;
+    color: #577043;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
@@ -72,15 +80,15 @@ nav li a {
 
 
 nav li a:hover {
-    color: #8c6865;
+    color: #f8f8f8;
 }
 
 .active {
     background-color:  #f8f8f8;
-    color: #8c6865;
+    color: #6765AD;
 }
 a.active:hover{
-  color: #8c6865;
+  color: #6765AD;
 
 }
 
@@ -90,7 +98,7 @@ a.active:hover{
 
 .optionselect{
 
-  color:#a69f7c;
+  color:#577043;
   margin-left: 50px;
 
 }
@@ -115,7 +123,7 @@ a.active:hover{
     margin-left: 50px;
     margin-bottom: 10px;
     text-align:left;
-    color: #a69f7c;
+    color: #577043;
 }
 .scale1name {
   position: relative;
@@ -128,7 +136,7 @@ a.active:hover{
 }
 
 .looptext{
-    color: #a69f7c;
+    color: #577043;
 }
 .submit{
     margin-top: 10px;
@@ -136,12 +144,12 @@ a.active:hover{
 
 .scalearpselect{
   margin-top: 10px;
-  color: #a69f7c;
+  color: #577043;
 }
 
 .pitchselect{
   margin-top: 10px;
-  color:#a69f7c;
+  color:#577043;
 }
 
 .keyselect{
