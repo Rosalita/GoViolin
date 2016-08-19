@@ -57,7 +57,7 @@ func main() {
 //handler for / renders the home.html
 func Home(w http.ResponseWriter, req *http.Request) {
 	pageVars := PageVars{
-		Title: "Welcome",
+		Title: "Violegro",
 	}
 	render(w, "home.html", pageVars)
 }

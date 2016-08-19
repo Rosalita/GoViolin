@@ -22,7 +22,18 @@
   offwhite - #F8F8F8
   lightgreen - #89B28A
   darkgreen - #577043
-  black - #000000
+  nearly black -#292929
+ */
+
+ /* scheme picked from image
+ light blue 199 217 236 #C7D9EC
+ navy blue  75 87 134  #4b5786
+ desaturated blue 86 129 178 #5681b2
+ mid blue 144 189 230 #90bde6
+ really dark blue 23, 55, 94 #17375e
+ orange 249 166 74 #f9a64a
+ dark brown 162 83 55 #a25337
+nearly black #292929
  */
 
 /* reset all margins and padding*/
@@ -37,14 +48,14 @@ body {
 }
 
 h1 {
-    color: #6765AD;
+    color: #17375e;
     margin-left: 20px;
     margin-top: 20px;
     margin-bottom: 10px
 }
 
 p {
-  color: #577043;
+  color:#292929;
   margin-left: 20px;
   margin-bottom: 20px;
 }
@@ -54,7 +65,7 @@ nav ul {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color:#89B28A;
+    background-color:#5681b2;
     position: fixed;
     top: 0;
     width: 100%;
@@ -62,7 +73,7 @@ nav ul {
 
 nav li {
   float: left;
-  border-right: 1px solid #577043;
+  border-right: 1px solid  #4b5786;
 }
 
 
@@ -72,7 +83,7 @@ nav li:last-child {
 
 nav li a {
     display: inline-block;
-    color: #577043;
+    color:  #4b5786;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
@@ -85,20 +96,27 @@ nav li a:hover {
 
 .active {
     background-color:  #f8f8f8;
-    color: #6765AD;
+    color: #4b5786;
 }
 a.active:hover{
-  color: #6765AD;
+  color: #4b5786;
 
 }
 
+.bg{
+  height: 500px;
+  background-image: url("/img/misc/violin.jpg");
+  background-repeat: no-repeat;
+  background-color: #292929;
+
+}
 .mainbody{
   padding-top: 75px;
 }
 
 .optionselect{
 
-  color:#577043;
+  color:#292929;
   margin-left: 50px;
 
 }
@@ -123,7 +141,7 @@ a.active:hover{
     margin-left: 50px;
     margin-bottom: 10px;
     text-align:left;
-    color: #577043;
+    color: #292929;
 }
 .scale1name {
   position: relative;
@@ -136,7 +154,7 @@ a.active:hover{
 }
 
 .looptext{
-    color: #577043;
+    color: #292929;
 }
 .submit{
     margin-top: 10px;
@@ -144,31 +162,36 @@ a.active:hover{
 
 .scalearpselect{
   margin-top: 10px;
-  color: #577043;
+  color: #292929;
 }
 
 .pitchselect{
   margin-top: 10px;
-  color:#577043;
+  color:#292929;
 }
 
 .keyselect{
   margin-top: 10px;
-  color: #A49A87;
+  color:#292929;
 }
 
 .octaveselect{
   margin-top: 10px;
-  color: #A49A87;
+  color: #292929;
 }
 
 .indent{
   margin-left: 30px;
 }
 
-footer {
-  padding-top: 75px;
-  color: #A49A87;
+.footer {
+  color:#4b5786;
   margin-left: 20px;
 
+}
+
+.cleff {
+position: absolute;
+left: 135px;
+top: 70px;
 }
