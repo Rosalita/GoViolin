@@ -57,7 +57,7 @@ func main() {
 //handler for / renders the home.html
 func Home(w http.ResponseWriter, req *http.Request) {
 	pageVars := PageVars{
-		Title: "Violegro",
+		Title: "Violegra",
 	}
 	render(w, "home.html", pageVars)
 }
@@ -262,31 +262,6 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	// if arpeggios is selected, disable the 1 octave radio button and default to 2 octaves
-	if scalearp == "Arpeggio" {
-
-		oOptions = []ScaleOptions{
-			ScaleOptions{"Octave", "1", true, false, "1 Octave"},
-			ScaleOptions{"Octave", "2", false, true, "2 Octave"},
-		}
-
-		// if any of the existing paths contain a 1, replace with 2
-		if strings.Contains(imgPath, "1") {
-			imgPath = imgPath[:len(imgPath)-5]
-			imgPath += "2.png"
-		}
-		if strings.Contains(audioPath, "1") {
-			audioPath = audioPath[:len(audioPath)-5]
-			audioPath += "2.mp3"
-		}
-
-		// if any of the existing audioPath2's contain a 1, replace with a 2
-		if strings.Contains(audioPath2, "1") {
-			audioPath2 = audioPath2[:len(audioPath2)-5]
-			audioPath2 += "2.mp3"
-		}
-
-	}
 
 	pageVars := PageVars{
 		Title:         "Practice Scales and Arpeggios",
