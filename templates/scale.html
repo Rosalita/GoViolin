@@ -60,6 +60,8 @@
 {{with $3:= .AudioPath}}  <span class="scale1name"> {{end}} {{.LeftLabel}} {{with $3:= .AudioPath}} </span> {{end}} {{with $3:= .AudioPath2}}  <span class="scale2name"> {{end}}{{.RightLabel}}  {{with $3:= .AudioPath2}} </span> {{end}}
 </div>
 
+<!-- switching static images to animated gifs is currently disabled.
+
 <script type="text/javascript">
 function audioPlay(){
   if ( {{.ScaleImgPath}} == "img/major/a1.png"){
@@ -68,16 +70,17 @@ function audioPlay(){
 }
 
 function audioPause(){
-
   document.getElementById('scaleImage').src='{{.ScaleImgPath}}'
   document.getElementById('myAudio').currentTime = 0;
 
 }
 </script>
+-->
 
 {{with $3:= .AudioPath}}
   <div class="audio">
-    <audio controls onplay="audioPlay()" onpause="audioPause()" id="myAudio">
+    <!-- to enable switching to animated gifs add onplay="audioPlay()" and onpause="audioPause()" to the audio controls -->
+    <audio controls id="myAudio">
     <source src="/{{$3}}" type="audio/mp3">
     Your browser does not support the audio element.
     </audio> <div class ="looptext"><input type="checkbox" name="loop" onclick="loopClicker()">  Loop <br></div>
