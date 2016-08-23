@@ -25,7 +25,34 @@
 <p>Franz Wohlfahrt (7 March 1833 - 14 February 1884) was a violin teacher in Leipzig Germany. He wrote the following duets around scales.</p>
 </div>
 
+<div class="optionselect">
+  <form action="/duetshow" method="post">
 
+      <div class="duetselect">
+       {{range .DuetOptions}}
+         <input type="radio" name={{.Name}} value={{.Value}} {{if .IsDisabled}} disabled=true {{end}} {{if .IsChecked}}checked{{end}}> {{.Text}}
+       {{end}}<br>
+      </div>
+
+  </form>
+</div>
+
+{{with $2:= .DuetImgPath}}
+  <div class="duet">
+    <img src="/{{$2}}" id="duetImage">
+  </div>
+{{end}}
+
+
+
+<!-- some jquery to make the selection form submit itself if the user changes the duet radio buttons -->
+<script type='text/javascript'>
+ $(document).ready(function() {
+   $('input[name=Duet]').change(function(){
+     $('form').submit();
+   });
+});
+</script>
 
 </body>
 </html>
