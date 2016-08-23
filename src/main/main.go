@@ -157,7 +157,7 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 			ScaleOptions{"Pitch", "Minor", false, true, "Minor"},
 		}
  }
- 
+
 		// Set octave options
  if octave == "1" {
 		oOptions = []ScaleOptions{
@@ -204,8 +204,6 @@ if pitch == "Major" {
 	}
 }
 
-
-
 // Intialise paths to the associated images and mp3s
 imgPath, audioPath, audioPath2 := "img/", "mp3/", "mp3/"
 
@@ -250,7 +248,8 @@ imgPath += ".png"
 // audio path2 can either be a melodic minor scale or a drone note.
 // Set to melodic minor scale - if the first 16 characters of audio path are:
  if audioPath[:16] == "mp3/scale/minor/"{
-	 audioPath2 = audioPath[:18] // set audioPath2 to the first 18 characters of audioPath e.g.   mp3/scale/minor/a1
+	 audioPath2 = audioPath  // set audioPath2 to the original audioPath
+	 audioPath2 = audioPath2[:len(audioPath2)-4] // chop off the last 4 characters, this removes .mp3
 	 audioPath2 += "m.mp3" // then add m for melodic and the .mp3 suffix
  } else { // audioPath2 needs to be a drone note.
 	 audioPath2 += "drone/"
