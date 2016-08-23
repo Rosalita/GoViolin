@@ -125,7 +125,24 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	//set the labels
+	// update the key options based on users selection to set isChecked true for selected key and false for all other keys
+	kOptions = setKeyOptions(key)
+
+// work out what the actual key is and set its value
+ if pitch == "Major" {
+	 // for major scales if the key is longer than 2 characters, we only care about the last 2 characters
+	 if len(key) > 2 { // only select last two characters for keys which contain two possible names e.g. C#/Db
+		 key = key[3:]
+	 }
+ } else { // pitch is minor
+	 // for minor scales if the key is longer than 2 characters, we only care about the first 2 characters
+ 	 if len(key) > 2 { // only select first two characters for keys which contain two possible names e.g. C#/Db
+ 			key = key[:2]
+ 	 }
+ }
+
+
+	//set the labels, Major have a scale and a drone, while minor have melodic and harmonic minor scales
 
 	if pitch == "Major" {
 		leftlabel = "Listen to Major "
@@ -145,8 +162,7 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	// update the key options based on users selection to set isChecked true for selected key and false for all other keys
-	kOptions = setKeyOptions(key)
+
 
 	//intialise paths to the associated images and mp3s
 	imgPath := "img/"
@@ -186,10 +202,7 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 			ScaleOptions{"Pitch", "Major", false, true, "Major"},
 			ScaleOptions{"Pitch", "Minor", false, false, "Minor"},
 		}
-		// for major scales if the key is longer than 2 characters, we only care about the last 2 characters
-		if len(key) > 2 {
-			key = key[3:]
-		}
+
 		imgPath += strings.ToLower(key) // keys must be added to the path as lower case
 		audioPath += strings.ToLower(key)
 		audioPath2 += strings.ToLower(key)
@@ -214,10 +227,7 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 			ScaleOptions{"Pitch", "Major", false, false, "Major"},
 			ScaleOptions{"Pitch", "Minor", false, true, "Minor"},
 		}
-		// for minor scales if the key is longer than 2 characters, we only care about the first 2 characters
-		if len(key) > 2 {
-			key = key[:2]
-		}
+
 		imgPath += strings.ToLower(key) // keys must be added to the path as lower case
 		audioPath += strings.ToLower(key)
 		audioPath2 += strings.ToLower(key)
