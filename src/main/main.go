@@ -254,6 +254,8 @@ imgPath += ".png"
  } else { // audioPath2 needs to be a drone note.
 	 audioPath2 += "drone/"
 	 audioPath2 += strings.ToLower(key)
+	 // may have just added a # to the path, so use the function to change # to s
+	 audioPath2 = changeSharpToS(audioPath2)
 	 switch octave {
 	 case "1":
 	 	audioPath2 += "1.mp3"
