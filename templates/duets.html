@@ -20,7 +20,6 @@
 
 <div class="mainbody">
 <h1>Practice Duets</h1>
-<p> Franz Wohlfahrt Scale Duets</p>
 <p>Franz Wohlfahrt (7 March 1833 - 14 February 1884) was a violin teacher in Leipzig Germany. He wrote the following duets around scales.</p>
 </div>
 
@@ -42,7 +41,26 @@
   </div>
 {{end}}
 
+<p>Listen to both parts</p>
+{{with $3:= .DuetAudio1}}
+  <div class="audio">
+    <!-- to enable switching to animated gifs add onplay="audioPlay()" and onpause="audioPause()" to the audio controls -->
+    <audio controls id="myAudio">
+    <source src="/{{$3}}" type="audio/mp3">
+    Your browser does not support the audio element.
+    </audio> <div class ="looptext"><input type="checkbox" name="loop" onclick="loopClicker()">  Loop <br></div>
+  </div>
 
+<script type="text/javascript">
+  function loopClicker(){
+    if (document.getElementById("myAudio").loop == false){
+      document.getElementById("myAudio").loop = true;
+    } else {
+      document.getElementById("myAudio").loop = false;
+    }
+  }
+</script>
+{{end}}
 
 <!-- some jquery to make the selection form submit itself if the user changes the duet radio buttons -->
 <script type='text/javascript'>

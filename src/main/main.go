@@ -17,6 +17,9 @@ type PageVars struct {
 	GifPath       string
 	AudioPath     string
 	AudioPath2    string
+	DuetAudio1    string
+	DuetAudio2    string
+	DuetAudio3    string
 	LeftLabel     string
 	RightLabel    string
 	ScaleOptions  []ScaleOptions

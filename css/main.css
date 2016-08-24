@@ -28,7 +28,7 @@
  /* scheme picked from image
  light blue 199 217 236 #C7D9EC
  navy blue  75 87 134  #4b5786
- desaturated blue 86 129 178 #5681b2
+ desaturated blue 86 129 178 #96b1cf
  mid blue 144 189 230 #90bde6
  really dark blue 23, 55, 94 #17375e
  orange 249 166 74 #f9a64a
@@ -65,7 +65,7 @@ nav ul {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color:#5681b2;
+    background-color:#96b1cf;
     position: fixed;
     top: 0;
     width: 100%;
