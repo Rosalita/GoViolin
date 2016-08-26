@@ -1,2 +1,11 @@
 # rosie-app
-Another painful trial and error learning exercise in golang net/http, webservers, templates and stumbling blind through back-end programming. Maybe one day this project will help me practice violin, providing I can still remember what a violin is by the time it's finished.
+
+Violego is a web app that helps with practice violin.
+
+Violego enables practice over 1 and 2 octaves.
+
+Contains:
+* Major Scales
+* Harmonic and Melodic Minor scales
+* Arpeggios
+* A set of two part scale duet melodies by Franz Wohlfahrt
