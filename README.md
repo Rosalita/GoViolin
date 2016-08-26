@@ -1,4 +1,4 @@
-# rosie-app
+# Violego
 
 Violego is a web app written in Go that helps with violin practice.
 
