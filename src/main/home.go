@@ -7,7 +7,7 @@ import (
 //handler for / renders the home.html
 func Home(w http.ResponseWriter, req *http.Request) {
 	pageVars := PageVars{
-		Title: "Violegra",
+		Title: "Violego",
 	}
 	render(w, "home.html", pageVars)
 }
