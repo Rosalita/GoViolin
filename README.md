@@ -1,8 +1,8 @@
 # rosie-app
 
-Violego is a web app that helps with practice violin.
+Violego is a web app written in Go that helps with violin practice.
 
-Violego enables practice over 1 and 2 octaves.
+Violego allows practice over both 1 and 2 octaves.
 
 Contains:
 * Major Scales
