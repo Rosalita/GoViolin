@@ -10,6 +10,7 @@ func Duets(w http.ResponseWriter, r *http.Request) {
 	dOptions := []ScaleOptions{
 		ScaleOptions{"Duet", "G Major", false, true, "G Major"},
 		ScaleOptions{"Duet", "D Major", false, false, "D Major"},
+		ScaleOptions{"Duet", "A Major", false, false, "A Major"},
 	}
 
 	pageVars := PageVars{
@@ -28,6 +29,7 @@ func DuetShow(w http.ResponseWriter, r *http.Request) {
 	dOptions := []ScaleOptions{
 		ScaleOptions{"Duet", "G Major", false, true, "G Major"},
 		ScaleOptions{"Duet", "D Major", false, false, "D Major"},
+		ScaleOptions{"Duet", "A Major", false, false, "A Major"},
 	}
 
 // Set a placeholder image path, this will be changed later.
@@ -47,14 +49,23 @@ DuetAudio1:= "mp3/duet/gmajorduetboth.mp3"
 		dOptions = []ScaleOptions{
 			ScaleOptions{"Duet", "G Major", false, false, "G Major"},
 			ScaleOptions{"Duet", "D Major", false, true, "D Major"},
+			ScaleOptions{"Duet", "A Major", false, false, "A Major"},
 		}
-		DuetAudio1 = "?"
+		DuetAudio1 = "mp3/duet/dmajorduetboth.mp3"
 	case "G Major":
 			dOptions = []ScaleOptions{
 				ScaleOptions{"Duet", "G Major", false, true, "G Major"},
 				ScaleOptions{"Duet", "D Major", false, false, "D Major"},
+				ScaleOptions{"Duet", "A Major", false, false, "A Major"},
 			}
 	    DuetAudio1 = "mp3/duet/gmajorduetboth.mp3"
+		case "A Major":
+				dOptions = []ScaleOptions{
+					ScaleOptions{"Duet", "G Major", false, false, "G Major"},
+					ScaleOptions{"Duet", "D Major", false, false, "D Major"},
+				  ScaleOptions{"Duet", "A Major", false, true,  "A Major"},
+				}
+				DuetAudio1 = "mp3/duet/amajorduetboth.mp3"
 		}
 
 
