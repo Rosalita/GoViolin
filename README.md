@@ -1,8 +1,8 @@
-# Violego
+# GoViolin
 
-Violego is a web app written in Go that helps with violin practice.
+GoViolin is a web app written in Go that helps with violin practice.
 
-Violego allows practice over both 1 and 2 octaves.
+GoViolin allows practice over both 1 and 2 octaves.
 
 Contains:
 * Major Scales
