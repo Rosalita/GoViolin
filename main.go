@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"os"
 )
 
 type PageVars struct {
@@ -54,8 +55,18 @@ func main() {
 	http.HandleFunc("/scaleshow", ScaleShow)
 	http.HandleFunc("/duets", Duets)
 	http.HandleFunc("/duetshow", DuetShow)
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(getPort(), nil)
 
+}
+
+// Detect $PORT and if present uses it for listen and serve else defaults to :8080
+// This is so that app can run on Heroku
+func getPort() string {
+	p := os.Getenv("PORT")
+	if p != "" {
+		return ":" + p
+	}
+	return ":8080"
 }
 
 func render(w http.ResponseWriter, tmpl string, pageVars PageVars) {
