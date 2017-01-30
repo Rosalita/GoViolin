@@ -1,0 +1,10 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [],
+	"heroku": {
+             "install" : [ "./..." ],
+             "goVersion": "go1.6"
+         },
+	"rootPath": "github.com/Rosalita/GoViolin"
+}
