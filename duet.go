@@ -14,11 +14,13 @@ func Duets(w http.ResponseWriter, r *http.Request) {
 	}
 
 	pageVars := PageVars{
-		  Title:        "Practice Duets",
-			Key:          "G Major",
-			DuetImgPath:  "img/duet/gmajor.png",
-			DuetAudio1:   "mp3/duet/gmajorduetboth.mp3",
-	    DuetOptions:  dOptions,
+		  Title:         "Practice Duets",
+			Key:           "G Major",
+			DuetImgPath:   "img/duet/gmajor.png",
+			DuetAudioBoth: "mp3/duet/gmajorduetboth.mp3",
+			DuetAudio1:    "mp3/duet/gmajorduetpt1.mp3",
+			DuetAudio2:    "mp3/duet/gmajorduetpt2.mp3",
+	    DuetOptions:   dOptions,
 	}
 	render(w, "duets.html", pageVars)
 }
@@ -33,7 +35,9 @@ func DuetShow(w http.ResponseWriter, r *http.Request) {
 	}
 
 // Set a placeholder image path, this will be changed later.
-DuetAudio1:= "mp3/duet/gmajorduetboth.mp3"
+DuetAudioBoth:= "mp3/duet/gmajorduetboth.mp3"
+DuetAudio1:= "mp3/duet/gmajorduetpt1"
+DuetAudio2:= "mp3/duet/gmajorduetpt2"
 
 	r.ParseForm() //r is url.Values which is a map[string][]string
 	var dvalues []string
@@ -51,22 +55,29 @@ DuetAudio1:= "mp3/duet/gmajorduetboth.mp3"
 			ScaleOptions{"Duet", "D Major", false, true, "D Major"},
 			ScaleOptions{"Duet", "A Major", false, false, "A Major"},
 		}
-		DuetAudio1 = "mp3/duet/dmajorduetboth.mp3"
+		DuetAudioBoth = "mp3/duet/dmajorduetboth.mp3"
+		DuetAudio1 = "mp3/duet/dmajorduetpt1.mp3"
+		DuetAudio2 = "mp3/duet/dmajorduetpt2.mp3"
 	case "G Major":
 			dOptions = []ScaleOptions{
 				ScaleOptions{"Duet", "G Major", false, true, "G Major"},
 				ScaleOptions{"Duet", "D Major", false, false, "D Major"},
 				ScaleOptions{"Duet", "A Major", false, false, "A Major"},
 			}
-	    DuetAudio1 = "mp3/duet/gmajorduetboth.mp3"
-		case "A Major":
-				dOptions = []ScaleOptions{
-					ScaleOptions{"Duet", "G Major", false, false, "G Major"},
-					ScaleOptions{"Duet", "D Major", false, false, "D Major"},
-				  ScaleOptions{"Duet", "A Major", false, true,  "A Major"},
-				}
-				DuetAudio1 = "mp3/duet/amajorduetboth.mp3"
-		}
+	    DuetAudioBoth = "mp3/duet/gmajorduetboth.mp3"
+			DuetAudio1 = "mp3/duet/gmajorduetpt1.mp3"
+			DuetAudio2 = "mp3/duet/gmajorduetpt2.mp3"
+
+	case "A Major":
+			dOptions = []ScaleOptions{
+				ScaleOptions{"Duet", "G Major", false, false, "G Major"},
+				ScaleOptions{"Duet", "D Major", false, false, "D Major"},
+				ScaleOptions{"Duet", "A Major", false, true,  "A Major"},
+			}
+			DuetAudioBoth = "mp3/duet/amajorduetboth.mp3"
+			DuetAudio1 = "mp3/duet/amajorduetpt1.mp3"
+			DuetAudio2 = "mp3/duet/amajorduetpt2.mp3"
+	}
 
 
 //	imgPath := "img/"
@@ -76,7 +87,9 @@ DuetAudio1:= "mp3/duet/gmajorduetboth.mp3"
 		Title:       "Practice Duets",
 		Key:         "G Major",
 		DuetImgPath: "img/duet/gmajor.png",
+		DuetAudioBoth: DuetAudioBoth,
 		DuetAudio1: DuetAudio1,
+		DuetAudio2: DuetAudio2,
 		DuetOptions: dOptions,
 	}
 	render(w, "duets.html", pageVars)

@@ -103,7 +103,10 @@ a.active:hover{
 
 }
 
-
+#container{width:900px;}
+#left{float:left;width:215px;}
+#right{float:right;width:215px;}
+#center{margin:0 auto;width:215px;}
 
 .bg{
   height: 500px;

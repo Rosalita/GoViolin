@@ -37,36 +37,41 @@
 
 <br>
 
-<p>Listen to both parts</p>
-{{with $3:= .DuetAudio1}}
-  <div class="audio">
-    <!-- to enable switching to animated gifs add onplay="audioPlay()" and onpause="audioPause()" to the audio controls -->
-    <audio controls id="myAudio">
-    <source src="/{{$3}}" type="audio/mp3">
-    Your browser does not support the audio element.
-    </audio> <div class ="looptext"><input type="checkbox" name="loop" onclick="loopClicker()">  Loop <br></div>
-  </div>
-{{end}}
-<p>Listen to part 1</p>
-{{with $3:= .DuetAudio2}}
-  <div class="audio">
-    <!-- to enable switching to animated gifs add onplay="audioPlay()" and onpause="audioPause()" to the audio controls -->
-    <audio controls id="myAudio">
-    <source src="/{{$3}}" type="audio/mp3">
-    Your browser does not support the audio element.
-    </audio> <div class ="looptext"><input type="checkbox" name="loop" onclick="loopClicker()">  Loop <br></div>
-  </div>
-{{end}}
-<p>Listen to part 2</p>
-{{with $3:= .DuetAudio3}}
-  <div class="audio">
-    <!-- to enable switching to animated gifs add onplay="audioPlay()" and onpause="audioPause()" to the audio controls -->
-    <audio controls id="myAudio">
-    <source src="/{{$3}}" type="audio/mp3">
-    Your browser does not support the audio element.
-    </audio> <div class ="looptext"><input type="checkbox" name="loop" onclick="loopClicker()">  Loop <br></div>
-  </div>
-{{end}}
+<div id="container">
+  <div id="left"><p>Listen to both parts</p>
+  {{with $3:= .DuetAudioBoth}}
+    <div class="audio">
+      <!-- to enable switching to animated gifs add onplay="audioPlay()" and onpause="audioPause()" to the audio controls -->
+      <audio controls id="myAudio">
+      <source src="/{{$3}}" type="audio/mp3">
+      Your browser does not support the audio element.
+      </audio> <div class ="looptext"><input type="checkbox" name="loop" onclick="loopClicker()">  Loop <br></div>
+    </div>
+  {{end}}</div>
+  <div id="right"><p>Listen to part 2</p>
+  {{with $3:= .DuetAudio2}}
+    <div class="audio">
+      <!-- to enable switching to animated gifs add onplay="audioPlay()" and onpause="audioPause()" to the audio controls -->
+      <audio controls id="myAudio">
+      <source src="/{{$3}}" type="audio/mp3">
+      Your browser does not support the audio element.
+      </audio> <div class ="looptext"><input type="checkbox" name="loop" onclick="loopClicker()">  Loop <br></div>
+    </div>
+  {{end}}</div>
+  <div id="center"><p>Listen to part 1</p>
+  {{with $3:= .DuetAudio1}}
+    <div class="audio">
+      <!-- to enable switching to animated gifs add onplay="audioPlay()" and onpause="audioPause()" to the audio controls -->
+      <audio controls id="myAudio">
+      <source src="/{{$3}}" type="audio/mp3">
+      Your browser does not support the audio element.
+      </audio> <div class ="looptext"><input type="checkbox" name="loop" onclick="loopClicker()">  Loop <br></div>
+    </div>
+  {{end}}</div>
+</div>
+
+
+
 
 <script type="text/javascript">
   function loopClicker(){
