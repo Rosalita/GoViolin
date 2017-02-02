@@ -73,8 +73,8 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 	// Set key options - set isChecked true for selected key and false for all other keys
 	kOptions = setKeyOptions(key)
 
-  // Set scale options
- if scalearp == "Scale" {
+	// Set scale options
+	if scalearp == "Scale" {
 		// if scale is selected set scale isChecked to true and arpeggio isChecked to false
 		sOptions = []ScaleOptions{
 			ScaleOptions{"Scalearp", "Scale", false, true, "Scales"},
@@ -89,20 +89,20 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Set pitch options
- if pitch == "Major" {
+	if pitch == "Major" {
 		pOptions = []ScaleOptions{ // if major was selected, set major isChecked to true and minor isChecked to false
 			ScaleOptions{"Pitch", "Major", false, true, "Major"},
 			ScaleOptions{"Pitch", "Minor", false, false, "Minor"},
 		}
- } else {
+	} else {
 		pOptions = []ScaleOptions{ // if minor was selected, set minor isChecked to true and major isChecked to false
 			ScaleOptions{"Pitch", "Major", false, false, "Major"},
 			ScaleOptions{"Pitch", "Minor", false, true, "Minor"},
 		}
- }
+	}
 
-		// Set octave options
- if octave == "1" {
+	// Set octave options
+	if octave == "1" {
 		oOptions = []ScaleOptions{
 			ScaleOptions{"Octave", "1", false, true, "1 Octave"},
 			ScaleOptions{"Octave", "2", false, false, "2 Octave"},
@@ -114,98 +114,97 @@ func ScaleShow(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-// work out what the actual key is and set its value
- if pitch == "Major" {
-	 // for major scales if the key is longer than 2 characters, we only care about the last 2 characters
-	 if len(key) > 2 { // only select last two characters for keys which contain two possible names e.g. C#/Db
-		 key = key[3:]
-	 }
- } else { // pitch is minor
-	 // for minor scales if the key is longer than 2 characters, we only care about the first 2 characters
- 	 if len(key) > 2 { // only select first two characters for keys which contain two possible names e.g. C#/Db
- 			key = key[:2]
- 	 }
- }
-
-
-// Set the labels, Major have a scale and a drone, while minor have melodic and harmonic minor scales
-if pitch == "Major" {
-	leftlabel = "Listen to Major "
-	rightlabel = "Listen to Drone"
-	if scalearp == "Scale" {
-		leftlabel += "Scale"
-	} else {
-		leftlabel += "Arpeggio"
+	// work out what the actual key is and set its value
+	if pitch == "Major" {
+		// for major scales if the key is longer than 2 characters, we only care about the last 2 characters
+		if len(key) > 2 { // only select last two characters for keys which contain two possible names e.g. C#/Db
+			key = key[3:]
+		}
+	} else { // pitch is minor
+		// for minor scales if the key is longer than 2 characters, we only care about the first 2 characters
+		if len(key) > 2 { // only select first two characters for keys which contain two possible names e.g. C#/Db
+			key = key[:2]
+		}
 	}
-} else {
-	if scalearp == "Arpeggio" {
-		leftlabel += "Listen to Minor Arpeggio"
+
+	// Set the labels, Major have a scale and a drone, while minor have melodic and harmonic minor scales
+	if pitch == "Major" {
+		leftlabel = "Listen to Major "
 		rightlabel = "Listen to Drone"
+		if scalearp == "Scale" {
+			leftlabel += "Scale"
+		} else {
+			leftlabel += "Arpeggio"
+		}
 	} else {
-		leftlabel += "Listen to Harmonic Minor Scale"
-		rightlabel += "Listen to Melodic Minor Scale"
+		if scalearp == "Arpeggio" {
+			leftlabel += "Listen to Minor Arpeggio"
+			rightlabel = "Listen to Drone"
+		} else {
+			leftlabel += "Listen to Harmonic Minor Scale"
+			rightlabel += "Listen to Melodic Minor Scale"
+		}
 	}
-}
 
-// Intialise paths to the associated images and mp3s
-imgPath, audioPath, audioPath2 := "img/", "mp3/", "mp3/"
+	// Intialise paths to the associated images and mp3s
+	imgPath, audioPath, audioPath2 := "img/", "mp3/", "mp3/"
 
-// Build paths to img and mp3 files that correspond to user selection
-if scalearp == "Scale" {
-	imgPath += "scale/"
-	audioPath += "scale/"
+	// Build paths to img and mp3 files that correspond to user selection
+	if scalearp == "Scale" {
+		imgPath += "scale/"
+		audioPath += "scale/"
 
-} else {
-	// if arpeggio is selected, add "arps/" to the img and mp3 paths
-	imgPath += "arps/"
-	audioPath += "arps/"
-}
+	} else {
+		// if arpeggio is selected, add "arps/" to the img and mp3 paths
+		imgPath += "arps/"
+		audioPath += "arps/"
+	}
 
-if pitch == "Major" {
-	imgPath += "major/"
-	audioPath += "major/"
-} else {
-	imgPath += "minor/"
-	audioPath += "minor/"
-}
+	if pitch == "Major" {
+		imgPath += "major/"
+		audioPath += "major/"
+	} else {
+		imgPath += "minor/"
+		audioPath += "minor/"
+	}
 
-audioPath += strings.ToLower(key)
-imgPath += strings.ToLower(key)
-// if the img or audio path contain #, delete last character and replace it with s
-imgPath = changeSharpToS(imgPath)
-audioPath = changeSharpToS(audioPath)
+	audioPath += strings.ToLower(key)
+	imgPath += strings.ToLower(key)
+	// if the img or audio path contain #, delete last character and replace it with s
+	imgPath = changeSharpToS(imgPath)
+	audioPath = changeSharpToS(audioPath)
 
-switch octave {
-case "1":
-	imgPath += "1"
-	audioPath += "1"
-case "2":
-	imgPath += "2"
-	audioPath += "2"
-}
+	switch octave {
+	case "1":
+		imgPath += "1"
+		audioPath += "1"
+	case "2":
+		imgPath += "2"
+		audioPath += "2"
+	}
 
-audioPath += ".mp3"
-imgPath += ".png"
+	audioPath += ".mp3"
+	imgPath += ".png"
 
-//generate audioPath2
-// audio path2 can either be a melodic minor scale or a drone note.
-// Set to melodic minor scale - if the first 16 characters of audio path are:
- if audioPath[:16] == "mp3/scale/minor/"{
-	 audioPath2 = audioPath  // set audioPath2 to the original audioPath
-	 audioPath2 = audioPath2[:len(audioPath2)-4] // chop off the last 4 characters, this removes .mp3
-	 audioPath2 += "m.mp3" // then add m for melodic and the .mp3 suffix
- } else { // audioPath2 needs to be a drone note.
-	 audioPath2 += "drone/"
-	 audioPath2 += strings.ToLower(key)
-	 // may have just added a # to the path, so use the function to change # to s
-	 audioPath2 = changeSharpToS(audioPath2)
-	 switch octave {
-	 case "1":
-	 	audioPath2 += "1.mp3"
-	 case "2":
-	 	audioPath2 += "2.mp3"
-	 }
- }
+	//generate audioPath2
+	// audio path2 can either be a melodic minor scale or a drone note.
+	// Set to melodic minor scale - if the first 16 characters of audio path are:
+	if audioPath[:16] == "mp3/scale/minor/" {
+		audioPath2 = audioPath                      // set audioPath2 to the original audioPath
+		audioPath2 = audioPath2[:len(audioPath2)-4] // chop off the last 4 characters, this removes .mp3
+		audioPath2 += "m.mp3"                       // then add m for melodic and the .mp3 suffix
+	} else { // audioPath2 needs to be a drone note.
+		audioPath2 += "drone/"
+		audioPath2 += strings.ToLower(key)
+		// may have just added a # to the path, so use the function to change # to s
+		audioPath2 = changeSharpToS(audioPath2)
+		switch octave {
+		case "1":
+			audioPath2 += "1.mp3"
+		case "2":
+			audioPath2 += "2.mp3"
+		}
+	}
 
 	pageVars := PageVars{
 		Title:         "Practice Scales and Arpeggios",
@@ -225,7 +224,6 @@ imgPath += ".png"
 	}
 	render(w, "scale.html", pageVars)
 }
-
 
 func setDefaultScaleOptions() ([]ScaleOptions, []ScaleOptions, []ScaleOptions, []ScaleOptions) {
 
