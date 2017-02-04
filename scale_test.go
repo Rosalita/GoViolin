@@ -5,9 +5,9 @@ import (
     "net/http"
 		"net/http/httptest"
 		"github.com/stretchr/testify/assert"
-    "bytes"
 		"net/url"
 		"fmt"
+
 	)
 
 type TD struct {
@@ -45,40 +45,61 @@ func TestScalePage(t *testing.T) {
 
     // Create a new responserecorder (which satisfies http.ResponseWriter) to record the response
     rr := httptest.NewRecorder()
-    handler := http.HandlerFunc(Home)
+    handler := http.HandlerFunc(Scale)
 
     // Handlers satisfy http.Handler, so can call their ServeHTTP method directly to pass in the request and responserecorder.
     handler.ServeHTTP(rr, r)
 
 		// assert status code of response recorder is OK
-    assert.Equal(t, rr.Code, http.StatusOK, "HandlerFunc(cale) returned wrong status code: got %v want %v", rr.Code, http.StatusOK)
+    assert.Equal(t, rr.Code, http.StatusOK, "HandlerFunc(Scale) returned wrong status code: got %v want %v", rr.Code, http.StatusOK)
 }
 
-func TestSetRadioButton(t *testing.T){
-	// Generate a request for 1 octave C major scale to pass to handler
+func TestSetRadioButtons(t *testing.T){
+	// Generate the values for 1 octave C major scale so can pass these values to pass to handler
+    form := url.Values{}
+    form.Set("Key", "C")
+    form.Add("Octave", "1")
+		form.Add("ScaleArp", "Scale")
+		form.Add("Pitch", "Major")
 
-    data := url.Values{}
-    data.Set("Key", "C")
-    data.Add("Octave", "1")
-		data.Add("ScaleArp", "Scale")
-		data.Add("Pitch", "Major")
-  	fmt.Println(data)
-
+	// url.Values is a map[string][]string
 	// url.Values{"Key": {"C"}, "Octave": {"1"},"ScaleArp": {"Scale"}, "Pitch": {"Major"}}
 
-	r, err := http.NewRequest("GET", "/scaleshow", data)
-	if err != nil {
-			t.Fatal(err)
-	}
+    // Create a new POST request with no body
+	  r, err := http.NewRequest("POST", "http://localhost:8080/scaleshow", nil)
+    if err != nil {
+      	t.Fatal(err)
+    }
 
-fmt.Println(r.Body)
 
-//
-//	rr := httptest.NewRecorder()
-//	handler := http.HandlerFunc(ScaleShow)
+	  // r.PostForm is currently an empty map
+	   fmt.Println(r.PostForm)
+		// Set r.PostForm to the url.Values that will be passed to the form
+    r.PostForm = form
 
-	// Handlers satisfy http.Handler, so can call their ServeHTTP method directly to pass in the request and responserecorder.
-//	handler.ServeHTTP(rr, r)
+    // create a new responserecorder
+		rr := httptest.NewRecorder()
 
-//	fmt.Println(rr.Body)
+    // create a handler which is set to the handler function that is being tested
+    handler := http.HandlerFunc(ScaleShow)
+
+    // Get the handler to serve the request storing result in the responserecorder
+		handler.ServeHTTP(rr, r)
+
+		//defer r.Body.Close()
+
+    fmt.Println(rr.Body)
+
+
+//	res, err := http.PostForm("http://localhost:8080/scaleshow", data)
+
+//	if err != nil {
+//		t.Fatal(err)
+//	}
+
+//	defer res.Body.Close()
+
+
+
+
 }
