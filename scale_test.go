@@ -38,7 +38,7 @@ func TestSharpToS(t *testing.T) {
 
 func TestScalePage(t *testing.T) {
     // Create a request to pass to handler
-    r, err := http.NewRequest("GET", "/scale", nil)
+    r, err := http.NewRequest("GET", "http://localhost:8080/scale", nil)
     if err != nil {
         t.Fatal(err)
     }
@@ -86,20 +86,12 @@ func TestSetRadioButtons(t *testing.T){
     // Get the handler to serve the request storing result in the responserecorder
 		handler.ServeHTTP(rr, r)
 
-		//defer r.Body.Close()
 
     fmt.Println(rr.Body)
+    fmt.Println(rr.Code)
+		fmt.Println(rr.HeaderMap)
+		fmt.Println(rr.Flushed)
 
-
-//	res, err := http.PostForm("http://localhost:8080/scaleshow", data)
-
-//	if err != nil {
-//		t.Fatal(err)
-//	}
-
-//	defer res.Body.Close()
-
-
-
+		assert.Equal(t, rr.Code, http.StatusOK, "HandlerFunc(Scaleshow) returned wrong status code: got %v want %v", rr.Code, http.StatusOK)
 
 }
