@@ -17,9 +17,12 @@ docker build -t s403o/goapp .
 '''
             }
           }
+          catch(e) {
+            currentBuild.result = "FAILED"
+            throw e
+          }
           finally {
-            echo "====++++This message shown when build is Fail++++===="
-            // sh ''' cat /home/log.txt '''
+            notifyBuild(currentBuild.result)
           }
         }
 
