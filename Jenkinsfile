@@ -9,10 +9,18 @@ pipeline {
 
     stage('Build Docker Image') {
       steps {
-        withCredentials(bindings: [[$class: 'UsernamePasswordMultiBinding', credentialsId: 'myDocker', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD']]) {
-          sh '''
-		          docker build -t s403o/goapp .
-	        '''
+        script {
+          try {
+            withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'myDocker', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD']]) {
+              sh '''
+docker build -t s403o/goapp .
+'''
+            }
+          }
+          finally {
+            echo "====++++This message shown when build is Fail++++===="
+            // sh ''' cat /home/log.txt '''
+          }
         }
 
       }
