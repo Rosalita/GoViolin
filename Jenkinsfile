@@ -9,9 +9,9 @@ pipeline {
 
     stage('Build Docker Image') {
       steps {
-        withCredentials(bindings: [usernamePassword(credentialsId: 'myDocker', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+        withCredentials(bindings: [[$class: 'UsernamePasswordMultiBinding', credentialsId: 'myDocker', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD']]) {
           sh '''
-		          docker build -t s403o/goapp . 2> ~/log.txt
+		          docker build -t s403o/goapp .
 	        '''
         }
 
@@ -20,7 +20,7 @@ pipeline {
 
     stage('Push Image To Dockerhub') {
       steps {
-        withCredentials(bindings: [usernamePassword(credentialsId: 'myDocker', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+        withCredentials(bindings: [[$class: 'UsernamePasswordMultiBinding', credentialsId: 'myDocker', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD']]) {
           sh '''
               docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
               docker push s403o/goapp
