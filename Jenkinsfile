@@ -21,9 +21,6 @@ docker build -t s403o/goapp .
             currentBuild.result = "FAILED"
             throw e
           }
-          finally {
-            notifyBuild(currentBuild.result)
-          }
         }
 
       }
