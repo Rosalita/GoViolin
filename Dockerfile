@@ -1,5 +1,5 @@
-# pull official base image
-FROM golang:alpine3.13
+### stage 1 (build) ###
+FROM golang:alpine3.13 as build
 
 # set working directory
 RUN mkdir -p /app
@@ -7,9 +7,6 @@ WORKDIR /app
 
 # install app dependencies
 RUN go mod init github.com/Rosalita/GoViolin
-RUN go mod tidy
-RUN go mod vendor
-RUN go mod verify
 
 # add app
 COPY . /app
@@ -17,10 +14,18 @@ COPY . /app
 # listener port at runtime
 EXPOSE 3000
 
+# build
+RUN go build -o go
+
 # test
 HEALTHCHECK --interval=1m --timeout=20s --start-period=30s --retries=3 \  
     CMD go test || exit 1
 
-# build & run
-RUN go build
-ENTRYPOINT [ "./GoViolin" ]
+### stage 2 (run) ###
+FROM alpine as production
+
+WORKDIR /app
+COPY --from=build /app .
+
+# run
+ENTRYPOINT [ "./go" ]
