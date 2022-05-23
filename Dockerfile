@@ -1,5 +1,5 @@
 ### stage 1 (build) ###
-FROM golang:alpine3.13 as build
+FROM golang:alpine3.15 as build
 
 # set working directory
 RUN mkdir -p /app
