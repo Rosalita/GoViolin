@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('git checkout') {
       steps {
-        git(url: 'https://github.com/s403o/GoViolin.git', branch: 'env.BRANCH_NAME', changelog: true, poll: true, credentialsId: 'myGit')
+        git(url: 'https://github.com/s403o/GoViolin.git', branch: '**', changelog: true, poll: true, credentialsId: 'myGit')
       }
     }
 
