@@ -10,3 +10,4 @@
 - if the build sucessful then Push Image To Dockerhub, else report to mail
 
 ## Diagram
+![diagram](https://user-images.githubusercontent.com/38042656/170201677-86103ceb-8a5e-4e14-82e6-2efc12f44bcd.jpeg)
