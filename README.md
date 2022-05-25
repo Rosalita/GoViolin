@@ -11,3 +11,7 @@
 
 ## Diagram
 ![diagram](https://user-images.githubusercontent.com/38042656/170201677-86103ceb-8a5e-4e14-82e6-2efc12f44bcd.jpeg)
+
+## Mail Report
+
+![report](https://user-images.githubusercontent.com/38042656/170383078-48ae9ea2-2ad4-4a5a-afc3-94e134e64218.PNG)
