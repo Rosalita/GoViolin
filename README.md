@@ -14,7 +14,7 @@
     1. Deployment
     2. ClusterIP
     3. Ingress
-4. App is deployed on an AKS cluster [20.121.167.232](20.121.167.232)
+4. App is deployed on an AKS cluster [20.121.167.232](http://20.121.167.232/)
 
 ## How to run
 - Docker file
