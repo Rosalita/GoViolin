@@ -51,6 +51,3 @@
     5. Create a UserName password credential with id **DockerHub**
     4. Paste the Jenkins file in the pipeline project.
 
-## Output 
-```
-```
