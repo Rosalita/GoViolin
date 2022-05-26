@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: violin-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: violin
+  template:
+    metadata:
+      labels:
+        app: violin
+    spec:
+      containers:
+        - name: violin-container
+          image: aayman1/violin-app:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: PORT
+              value: "8080"
