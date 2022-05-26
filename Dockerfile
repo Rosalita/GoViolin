@@ -10,6 +10,10 @@ COPY . /web_go
 
 # Download all the dependencies
 RUN go get -d -v ./...
+RUN go mod init github.com/Rosalita/GoViolin
+RUN go mod tidy
+RUN go mod vendor
+RUN go mod verify
 
 # Install the package
 RUN go install -v ./...
